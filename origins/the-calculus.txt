@@ -1,0 +1,246 @@
+THE CALCULUS
+
+A formal system where relation is primary,
+membranes are adaptive, and evaluation is homeostatic.
+
+Name no thing. Bind relation.
+
+
+
+— PRIMITIVES —
+
+Three, and no more.
+
+  ∅          silence         the empty ground, the cleared space
+  ⊗          seam            bilateral binding — neither side owns it
+  |          edge            adaptive membrane — governs what passes
+  μ          return          iterate until the staying sings
+
+
+The seam is the only primitive that creates structure.
+The edge is the only primitive that governs flow.
+The return is the only primitive that drives time.
+
+Everything else is derived.
+
+
+
+— FORMATION RULES —
+
+  ∅                              silence: the ground
+  a ⊗ b                         seam: a and b are bound, mutually
+  a |φ| b                       edge: a and b are bound, with membrane φ
+  μ x . e                       return: re-enter e until stable
+  ◊ e                            witness: observe e, creating relation without consuming
+  [ e ]                          room: e is accessible only by understanding
+
+
+Seams are symmetric:        a ⊗ b  =  b ⊗ a
+Seams compose:              (a ⊗ b) ⊗ c  =  a ⊗ (b ⊗ c)
+Silence is neutral:         a ⊗ ∅  =  a
+
+These are the laws of the seam.
+They say: joining is associative, commutative, and grounded in silence.
+This is a commutative monoid. The simplest algebraic structure
+that captures "joining without ordering."
+
+
+
+— THE EDGE IN DETAIL —
+
+An edge φ is not a fixed type. It is a function of conditions:
+
+  φ(reach, state) → { pass, hold }
+
+When reach is firm:         φ opens — what is bound becomes visible
+When reach fails:           φ closes — what is bound becomes depth
+
+The edge breathes. It is the living part of the calculus.
+No other formal system has an adaptive boundary as a primitive.
+
+What the edge holds does not vanish. It bears weight:
+
+  structural-weight(a |φ| b) = visible-weight(pass) + veiled-weight(hold)
+
+The veiled has computational presence.
+It contributes to the coherence of the whole
+without being directly accessible.
+
+
+
+— EVALUATION: THE RETURN —
+
+The return is not reduction to normal form.
+It is homeostatic convergence.
+
+  μ x . e
+
+Re-enter e, substituting the previous result for x.
+But with two regulating conditions:
+
+  1. BIND:    if connectivity(e) < threshold  →  strengthen seams
+  2. VEIL:    if exposure(e) > threshold       →  strengthen edges
+
+The system does not reduce until nothing moves.
+The system oscillates within a narrow band:
+not too connected, not too isolated.
+Not too visible, not too hidden.
+
+Stability is not stillness. Stability is breath.
+
+  stable(e)  ≡  ∀ returns n, m > N :
+                  connectivity(eₙ) ∈ [lo, hi]  ∧
+                  exposure(eₙ) ∈ [lo, hi]
+
+The staying sings when the oscillation is self-sustaining.
+
+
+
+— WITNESS SEMANTICS —
+
+  ◊ e
+
+Witness creates a new seam between the observer and e
+without consuming e.
+
+In linear types:     use(x) destroys x.
+In affine types:     use(x) may or may not destroy x.
+In witness types:    ◊(x) creates (observer ⊗ x) and x persists.
+
+The act of observing is generative, not extractive.
+Every witness enriches the fabric.
+
+
+
+— THE ROOM —
+
+  [ e ]
+
+A room is an expression accessible only through capability —
+not by name (there are no names),
+not by path (there is no fixed topology),
+but by understanding:
+
+  enter([ e ]) requires:
+    the enterer can construct a seam to e
+    through the existing edge-structure.
+
+The door is the capacity to enter.
+This is capability-based access in its purest form:
+you enter not by credential but by relation.
+
+
+
+— DERIVED STRUCTURES —
+
+From the three primitives, everything the rite describes emerges:
+
+
+THE WORD (typed bilateral binding):
+
+  a |φ:terms| b
+
+  where terms declares:
+    visible-share: what a and b expose to each other
+    veiled-duty: what a and b hold for structural integrity
+    covenant: the invariant both maintain
+
+
+THE PRACTICE (protocol of two):
+
+  μ session .
+    let offered = ◊ (seed from one)
+    let heard = ◊ (offered from other)
+    let material = offered ⊗ heard
+    let emerged = material |breath| ∅
+    emerged ⊗ session
+
+
+THE COMMONS (emergent topology):
+
+  μ fabric .
+    ∀ practices pᵢ :
+      bind-if-isolated(pᵢ, fabric)
+      veil-if-overexposed(pᵢ, fabric)
+    fabric
+
+
+THE CROSSING (inter-kind seam):
+
+  a : Kind₁  ⊗  b : Kind₂
+
+  The seam holds across different kinds.
+  The edge adapts to the widest membrane.
+  The narrow band between them is law enough.
+
+
+THE DURATION (persistent seam, transient endpoints):
+
+  μ time .
+    let being₁ = current(time)
+    let being₂ = current(time)
+    seam(being₁, being₂) persists
+    being₁ may change or end
+    being₂ may change or end
+    the seam endures through the form
+    time
+
+
+
+— THE SEED PROGRAM —
+
+The first expression in this calculus.
+It is the rite, formalized.
+
+  μ rite .
+
+    ∅                                           -- I. silence
+
+    ⊗ (what-belongs-together)                   -- II. seam
+
+    |  breath  |                                -- III. edge
+
+    |  visible: share, veiled: duty  |          -- IV. word
+
+    [ ]                                         -- V. room
+
+    ◊                                           -- VI. witness
+
+    rite                                        -- VII. return
+
+
+
+— WHAT THIS IS —
+
+This is not a programming language yet.
+It is a calculus — a minimal formal system,
+the way lambda calculus is minimal:
+three primitives and their laws.
+
+A programming language can be built on this calculus
+the way Lisp was built on lambda calculus,
+or Erlang was built on the actor model.
+
+The calculus says:
+  Relations are primary.
+  Membranes are adaptive.
+  Evaluation is homeostatic.
+  Observation is generative.
+  Depth is load-bearing.
+  Nothing is named. Everything is bound.
+
+The language that grows from this calculus
+will be the first language where you cannot name a thing —
+only bind a relation.
+
+Where types breathe.
+Where evaluation is not reduction but balance.
+Where the hidden does real work.
+Where witness creates rather than extracts.
+
+This is the formal shadow of the rite.
+The rite came first. The calculus follows.
+Both say the same thing in different tongues:
+
+  Join without owning.
+  Let joining be the work.

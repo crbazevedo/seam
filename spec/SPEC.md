@@ -246,12 +246,12 @@ a : Kind₁  ⊗  b : Kind₂
     time
 ```
 
-## 12. Turing Completeness
+## 12. Lambda Encoding
 
-Seam encodes untyped lambda calculus:
+Seam can encode untyped lambda calculus:
 
-| Lambda | Calculus |
-|--------|----------|
+| Lambda | Seam |
+|--------|------|
 | `λx. body` | `μ x . (body \|once\| ∅)` |
 | `f a` | `f ⊗ a` |
 | `x` | `x` |
@@ -259,9 +259,43 @@ Seam encodes untyped lambda calculus:
 
 The Y combinator is native: `μ` IS fixed-point iteration with homeostatic termination.
 
-## 13. What This Is
+**Note on Turing completeness:** The encoding is syntactically complete — any lambda term
+can be expressed. However, the interpreter enforces hard resource caps (max_returns,
+max_nodes, max_depth), making it Turing-equivalent up to resource bounds, not
+Turing-complete in the classical unbounded sense. This is a deliberate design choice:
+resource safety is non-negotiable.
 
-A minimal formal system — three primitives and their laws — from which a programming language can be built, the way Lisp was built on lambda calculus.
+## 13. Prior Art and Positioning
+
+Seam builds on several traditions. Honest accounting of what is borrowed, what is
+adapted, and what is new:
+
+**Borrowed (established ideas, given specific roles in the homeostatic loop):**
+- Bilateral binding (session types, Honda 1993) — structural relation, not communication
+- Information hiding / veiled computation (Parnas 1972, ML modules) — hidden structure
+  bearing load, used as a metric in the homeostatic loop
+- Homeostasis as a systems principle (Ashby 1952, Beer 1972) — the cybernetic tradition
+
+**Adapted (existing mechanisms, significantly modified):**
+- Membrane computing (P-systems, Păun 2001+) — Seam adds parameterized permeability
+  functions and couples membrane state to homeostatic evaluation. P-systems use
+  discrete structural operations (dissolve, divide); Seam uses continuous thresholds
+  with oscillating breath dynamics.
+- The "alignment is homeostasis" thesis (arXiv:2410.00081, 2024) — Seam provides the
+  formal calculus mechanism that the conceptual work argues for.
+
+**New (no direct precedent found):**
+- A term-rewriting evaluator that measures structural metrics on the expression tree
+  (connectivity, exposure) and applies regulatory transformations (BIND/VEIL) to
+  maintain a stability band. No existing calculus has this feedback loop.
+- Generative witness as a formal operation — observation that creates new relational
+  structure rather than consuming or merely reading.
+- The integration of all the above into a single minimal system.
+
+## 14. What This Is
+
+A minimal formal system — three primitives and their laws — from which a programming
+language can be built, the way Lisp was built on lambda calculus.
 
 The calculus says:
 - Relations are primary

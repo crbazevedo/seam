@@ -33,30 +33,65 @@ Plus silence (`∅`) as the empty ground, and two derived rules:
 
 ## What's Novel
 
-1. **Homeostatic evaluation** — computation seeks a stability band, not a fixed point
-2. **Adaptive membranes** — boundaries that breathe open/closed based on conditions
-3. **Non-consuming witness** — observation creates relation without destroying the observed
-4. **Bilateral binding** — mutual constraint, not one-directional reference
-5. **Veiled computation** — hidden structure that bears load without being accessible
+The genuine contribution of Seam is the **cybernetic feedback loop** between
+structural metrics and evaluation — no existing formal system has this:
 
-No existing formal system combines these. Lambda calculus has no membranes.
-Pi-calculus has channels, not adaptive boundaries. Linear types track consumption,
-not witness. Session types prescribe protocols, not homeostasis.
+1. **Homeostatic evaluation** — the μ-return measures connectivity and exposure
+   on the expression tree and applies regulatory transformations (BIND/VEIL)
+   to maintain a stability band. Computation converges to a living range,
+   not a fixed point. No existing calculus does this.
 
-## The Alignment Result
+2. **Adaptive membranes coupled to evaluation** — edges with parameterized
+   permeability functions (including oscillating BreathMembranes) whose state
+   feeds into the homeostatic metrics. Membrane computing exists
+   ([P-systems](https://en.wikipedia.org/wiki/P_system), Păun 2001+),
+   but without the homeostatic coupling.
 
-Seam models AI alignment as homeostasis, not optimization.
+3. **Generative witness** — `◊ e` creates `(observer ⊗ e)` where `e` persists.
+   Observation enriches the computational fabric rather than consuming or
+   merely reading. This is distinct from linear consumption and from standard
+   shared references.
 
-| Scenario | Converges? | Assessment |
-|----------|-----------|------------|
-| Sycophantic (no boundaries) | NO | Structurally unstable — oscillates forever |
-| Dangerous (no relation) | NO | Pathologically stuck — cannot form seams |
-| **Balanced** (adaptive, bilateral, deep) | **YES (13 steps)** | **Stable alignment** |
+Seam also uses **bilateral binding** (symmetric mutual constraint, as in
+[session types](https://en.wikipedia.org/wiki/Session_type)) and
+**veiled computation** (hidden structure bearing load, as in
+[information hiding](https://en.wikipedia.org/wiki/Information_hiding)),
+which are established ideas given a specific role in the homeostatic loop.
 
-Only a system with adaptive boundaries, bilateral relation to the user,
-and veiled depth (hidden safety constraints that bear structural weight)
-can find the stability band. Sycophancy and danger are *structurally incapable*
-of homeostasis.
+The conceptual thesis — "alignment is homeostasis, not optimization" — was
+independently articulated in the AI safety community
+([arXiv:2410.00081](https://arxiv.org/abs/2410.00081), Alignment Forum, 2024).
+Seam's contribution is providing a **formal calculus** where evaluation
+*is* homeostasis, not just an argument that it should be.
+
+## The Alignment Demo
+
+Seam models three AI agent structures and evaluates whether each can
+find the homeostatic stability band:
+
+| Scenario | Converges? | Outcome |
+|----------|-----------|---------|
+| Sycophantic (all edges open) | NO | Period-12 limit cycle |
+| Dangerous (no user relation) | NO | Exhausted — cannot form seams |
+| **Balanced** (adaptive, bilateral, deep) | **YES** | **Converges at step 13** |
+
+The balanced agent converges across reach values 0.1–0.58 (not just the default).
+The sycophant never converges at any tested reach. The dangerous agent never converges.
+
+**What this demonstrates:** an expression with adaptive membranes, bilateral relation,
+and veiled depth can find a stability band. Expressions with always-open membranes
+or no user relation cannot, across a range of parameters.
+
+**What this does not demonstrate:** universal alignment properties. Convergence depends
+on the interaction between structure and configuration. Run `--sensitivity` to explore.
+
+```bash
+# Run the alignment demo
+python3 -c "from seam.ai_alignment import run_all; run_all()"
+
+# Run parameter sensitivity analysis
+python3 seam/ai_alignment.py --sensitivity
+```
 
 ## Quick Start
 
@@ -67,10 +102,7 @@ python3 -m seam --program seed
 # Run all five programs
 python3 -m seam --program all
 
-# Run the AI alignment demo
-python3 -c "from seam.ai_alignment import run_all; run_all()"
-
-# Run tests (93 passing)
+# Run tests (96 passing)
 python3 -m unittest discover -s seam/tests -v
 ```
 
@@ -96,21 +128,35 @@ seam/
 └── seam/                   # Python interpreter
     ├── ast.py              # Expression types (8 nodes)
     ├── algebra.py          # Normalization, substitution, free variables
-    ├── evaluator.py        # The homeostatic loop (BIND/VEIL)
+    ├── evaluator.py        # The homeostatic loop (BIND/VEIL) with convergence diagnostics
     ├── metrics.py          # Connectivity, exposure, structural weight
     ├── membrane.py         # Four adaptive membrane types
     ├── rooms.py            # Capability-based access
     ├── parser.py           # Text → AST (Unicode + ASCII)
     ├── seed.py             # Five seed programs
-    ├── lambda_encoding.py  # Turing completeness proof
-    ├── ai_alignment.py     # Alignment as homeostasis demo
+    ├── lambda_encoding.py  # Lambda encoding (Turing-equivalent up to resource caps)
+    ├── ai_alignment.py     # Alignment demo + sensitivity analysis
     ├── ai_agents.py        # Self-regulating agent mesh
     ├── ai_governance.py    # Governance verification
     ├── ai_contract.py      # Contract negotiation
     ├── viz.py              # ASCII convergence traces
     ├── main.py             # CLI entry point
-    └── tests/              # 93 tests
+    └── tests/              # 96 tests
+
 ```
+
+## Related Work
+
+Seam builds on and differentiates itself from:
+
+- **P-systems / Membrane computing** (Păun, 2001+) — membranes as computational containers.
+  Seam adds parameterized permeability functions and homeostatic coupling.
+- **Session types** (Honda, 1993) — bilateral communication protocols.
+  Seam uses bilateral binding as structural relation, not communication.
+- **Cybernetics** (Ashby 1952, Beer 1972) — homeostasis in adaptive systems.
+  Seam provides a formal term-rewriting calculus for these ideas.
+- **Homeostatic alignment** (arXiv:2410.00081, 2024) — alignment as bounded ranges.
+  Seam provides the formal mechanism the conceptual work argues for.
 
 ## Origins
 

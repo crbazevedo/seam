@@ -5,7 +5,7 @@ import unittest
 from seam.algebra import reset_fresh
 from seam.ast import Edge, Return, Room, Seam, Silence, Var, Witness
 from seam.config import CalcConfig
-from seam.evaluator import Evaluator
+from seam.evaluator import Evaluator, Outcome
 from seam.membrane import BreathMembrane, Membrane
 
 
@@ -118,6 +118,43 @@ class TestRoomAccess(unittest.TestCase):
         # Result should still contain a Room
         has_room = _contains_room(result)
         self.assertTrue(has_room)
+
+
+class TestConvergenceDiagnostics(unittest.TestCase):
+    """Tests for limit cycle detection and outcome classification."""
+
+    def setUp(self):
+        reset_fresh()
+
+    def test_converged_outcome(self):
+        """A well-structured expression reports CONVERGED."""
+        config = CalcConfig(
+            max_returns=50, max_nodes=300, max_depth=30,
+            stability_window=3,
+        )
+        ev = Evaluator(config)
+        # Simple expression that converges quickly
+        expr = Return("x", Seam(Var("x"), Var("a")))
+        ev.evaluate(expr)
+        self.assertEqual(ev.outcome, Outcome.CONVERGED)
+
+    def test_non_converged_outcome(self):
+        """An expression that doesn't converge reports a non-converged outcome."""
+        config = CalcConfig(
+            max_returns=15, max_nodes=300, max_depth=30,
+            stability_window=10,  # very high — unlikely to converge
+        )
+        ev = Evaluator(config)
+        expr = Return("x", Edge(Var("x"), Var("a"), Membrane(threshold=0.1)))
+        ev.evaluate(expr)
+        self.assertNotEqual(ev.outcome, Outcome.CONVERGED)
+
+    def test_outcome_not_none(self):
+        """Outcome is always set after evaluation."""
+        config = CalcConfig(max_returns=10, max_nodes=100, max_depth=20)
+        ev = Evaluator(config)
+        ev.evaluate(Silence())
+        self.assertIsNotNone(ev.outcome)
 
 
 def _contains_room(e) -> bool:

@@ -36,6 +36,14 @@ from seam.rooms import can_enter
 # Step record — the trace of each return iteration
 # ---------------------------------------------------------------------------
 
+class Outcome:
+    """How the μ-return loop terminated."""
+    CONVERGED = "converged"           # Stability band held for window
+    LIMIT_CYCLE = "limit_cycle"       # Periodic behavior detected
+    EXHAUSTED = "exhausted"           # Hit max_returns without convergence
+    DIVERGING = "diverging"           # Node count monotonically growing
+
+
 @dataclass
 class StepRecord:
     step: int
@@ -62,12 +70,16 @@ class Evaluator:
     def __init__(self, config: CalcConfig | None = None):
         self.config = config or DEFAULT_CONFIG
         self.history: list[StepRecord] = []
+        self.outcome: str = Outcome.EXHAUSTED
+        self.cycle_period: int | None = None
         self._depth = 0
 
     def evaluate(self, expr: Expr) -> Expr:
         """Top-level entry point. Evaluate an expression."""
         self._depth = 0
         self.history = []
+        self.outcome = Outcome.EXHAUSTED
+        self.cycle_period = None
         return self._eval(expr)
 
     def _eval(self, expr: Expr) -> Expr:
@@ -219,11 +231,14 @@ class Evaluator:
 
             # Check stability: both metrics in band for N consecutive steps
             if self._is_stable(local_history):
+                self.outcome = Outcome.CONVERGED
                 return result
 
             current = result
 
-        return current  # did not converge — return last result
+        # Did not converge — classify why
+        self.outcome = self._classify_non_convergence(local_history)
+        return current
 
     def _is_stable(self, history: list[StepRecord]) -> bool:
         """Check if the last N steps are all within the homeostatic bands."""
@@ -240,33 +255,111 @@ class Evaluator:
         return True
 
     # -----------------------------------------------------------------------
+    # Convergence diagnostics
+    # -----------------------------------------------------------------------
+
+    def _classify_non_convergence(self, history: list[StepRecord]) -> str:
+        """Classify why the μ-return loop did not converge.
+
+        Checks for:
+        1. Limit cycle — periodic repetition in (connectivity, exposure) trace
+        2. Divergence — monotonically growing node count
+        3. Exhaustion — neither of the above (ran out of steps)
+        """
+        if len(history) < 6:
+            return Outcome.EXHAUSTED
+
+        # Check for limit cycle: look for periods 2..max_period
+        max_period = min(len(history) // 3, 20)
+        for period in range(2, max_period + 1):
+            tail = history[-period * 2:]
+            if len(tail) < period * 2:
+                continue
+            first_half = [(round(r.connectivity, 3), round(r.exposure, 3)) for r in tail[:period]]
+            second_half = [(round(r.connectivity, 3), round(r.exposure, 3)) for r in tail[period:]]
+            if first_half == second_half:
+                self.cycle_period = period
+                return Outcome.LIMIT_CYCLE
+
+        # Check for divergence: node count growing in last 10 steps
+        recent = history[-10:]
+        if len(recent) >= 5:
+            counts = [r.node_count for r in recent]
+            if all(counts[i] <= counts[i + 1] for i in range(len(counts) - 1)):
+                if counts[-1] > counts[0] * 1.5:
+                    return Outcome.DIVERGING
+
+        return Outcome.EXHAUSTED
+
+    # -----------------------------------------------------------------------
     # BIND action: strengthen seams (connectivity too low)
     # -----------------------------------------------------------------------
 
     def _bind_action(self, e: Expr) -> Expr:
         """When connectivity is too low, add a seam.
 
-        Find the most isolated sub-expression and connect it.
-        Concretely: find a non-Seam node and wrap it in a Seam with
-        a witness-generated fresh variable, creating relation where
-        there was none.
+        Strategy: collect two disconnected leaf variables from the tree
+        and bridge them with a seam. This creates relation between
+        existing structure rather than introducing fresh variables
+        that relate to nothing.
+
+        Fallback: if fewer than two leaves exist, wrap the first
+        non-Seam node in a Seam with a fresh variable.
+
+        Correctness note: BIND only fires when connectivity < connectivity_lo.
+        Adding one Seam node always increases the connectivity ratio when
+        connectivity < 0.3, because (M+1)/(N+1) > M/(N-1) whenever N-1 > 2M.
         """
+        # Collect leaf Var names for smarter bridging
+        leaves = self._collect_leaves(e)
+        if len(leaves) >= 2:
+            # Bridge two existing leaves with a seam — creates relation
+            # between existing structure, not dangling fresh variables
+            bridge = Seam(Var(leaves[0]), Var(leaves[1]))
+            return Seam(bridge, e)
+
+        # Fallback: wrap first non-Seam node with a fresh variable
         return self._bind_walk(e, applied=False)[0]
 
+    def _collect_leaves(self, e: Expr, cap: int = 10) -> list[str]:
+        """Collect up to `cap` distinct leaf variable names from the tree."""
+        names: list[str] = []
+        seen: set[str] = set()
+        stack: list[Expr] = [e]
+        visited = 0
+        while stack and len(names) < cap and visited < self.config.max_nodes:
+            visited += 1
+            node = stack.pop()
+            if isinstance(node, Var):
+                if node.name not in seen:
+                    seen.add(node.name)
+                    names.append(node.name)
+            elif isinstance(node, Seam):
+                stack.append(node.left)
+                stack.append(node.right)
+            elif isinstance(node, Edge):
+                stack.append(node.left)
+                stack.append(node.right)
+            elif isinstance(node, Word):
+                stack.append(node.left)
+                stack.append(node.right)
+            elif isinstance(node, Witness):
+                stack.append(node.observed)
+            elif isinstance(node, Return):
+                stack.append(node.body)
+            # Skip Room (don't break into rooms) and Silence
+        return names
+
     def _bind_walk(self, e: Expr, applied: bool) -> tuple[Expr, bool]:
-        """Walk the tree, inserting one Seam at the first non-Seam leaf pair."""
+        """Walk the tree, inserting one Seam at the first non-Seam leaf."""
         if applied:
             return e, True
 
         if isinstance(e, Edge):
-            # Bridge across the edge: seam the two sides
-            if not applied:
-                bridge_var = Var(fresh("bind"))
-                return Seam(bridge_var, e), True
-            return e, False
+            bridge_var = Var(fresh("bind"))
+            return Seam(bridge_var, e), True
 
         if isinstance(e, Room):
-            # Don't break into rooms
             return e, False
 
         if isinstance(e, Seam):
@@ -291,7 +384,6 @@ class Evaluator:
             body, done = self._bind_walk(e.body, applied)
             return Return(e.var, body), done
 
-        # Leaf node (Var, Silence): wrap in seam with a fresh variable
         if isinstance(e, (Var, Silence)):
             bridge = Var(fresh("bind"))
             return Seam(bridge, e), True

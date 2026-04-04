@@ -5,108 +5,92 @@
 - [x] Formal specification (SPEC.md)
 - [x] Interpreter: AST, algebra, metrics, evaluator, membranes, rooms
 - [x] Parser (Unicode + ASCII, 41 tests)
-- [x] Seed program + all derived structures (practice, commons, crossing, duration)
-- [x] Lambda calculus encoding (Turing-equivalent up to resource caps)
-- [x] AI alignment demo (sycophantic/dangerous/balanced)
-- [x] Agent mesh demo (healthy/degraded/fragmented)
+- [x] Seed program + all derived structures
+- [x] Lambda encoding (Turing-equivalent up to resource caps)
+- [x] AI alignment demo + agent mesh demo
 - [x] 93 tests, all passing
 - [x] Resource safety: hard caps on nodes, depth, iterations
 
 ## Phase 1A: Engineering Truth (COMPLETE)
 
-Honest assessment of claims, bug fixes, reframing.
+- [x] Fix hardcoded band values, improve BIND strategy
+- [x] Add convergence diagnostics (limit cycle, divergence, exhaustion)
+- [x] Parameter sensitivity analysis
+- [x] Reframe novelty claims, cite prior art
+- [x] 96 tests
 
-- [x] Fix hardcoded band values in `analyze_alignment` (was ignoring config)
-- [x] Improve BIND strategy (bridge existing leaves, not just fresh variables)
-- [x] Add convergence diagnostics: limit cycle detection (period detection),
-      divergence classification (CONVERGED / LIMIT_CYCLE / DIVERGING / EXHAUSTED)
-- [x] Parameter sensitivity analysis for alignment demo
-- [x] Reframe novelty claims honestly — cite prior art (P-systems, session types,
-      cybernetics, arXiv:2410.00081)
-- [x] Correct Turing completeness claim (bounded, not classical TC)
-- [x] Add Prior Art section to SPEC.md
-- [x] 96 tests, all passing
+## Phase 1B: Prove and Ground (COMPLETE)
 
-### Discoveries from Phase 1A
+Addressed the three root causes from the honest review: no proofs,
+no grounding, identity crisis.
 
-1. **The genuine novelty is the feedback loop**, not any single primitive.
-   Structural metrics → regulatory evaluation → membrane modification → repeat.
-   No existing calculus has this cybernetic evaluator.
+- [x] **Theorem 1: BIND monotonicity** — proven and tested (8 expression types)
+- [x] **Theorem 2: VEIL monotonicity** — proven and tested (5 expression types)
+- [x] **Theorem 3: BIND exposure neutrality** — proven and tested
+- [x] **Theorem 4: Termination** — proven (O(max_returns × max_nodes × max_depth))
+- [x] **Theorem 5: Sufficient convergence conditions** — stated
+- [x] **Section 5: Not a PID controller** — autopoietic argument
+- [x] Scientific claim tests: BIND/VEIL monotonicity, alignment demo properties,
+      sycophant limit cycle detection, balanced robustness across reach values
+- [x] Fixed primitive count (4 + 2 derived, not "three")
+- [x] Clean README (technical focus, no stale data, poetry in origins/)
+- [x] spec/PROOF.md with all formal arguments
+- [x] 117 tests, all passing
 
-2. **BreathMembrane is the critical innovation** among membrane types.
-   Oscillating permeability coupled with homeostatic evaluation creates
-   the living dynamics. The other membrane types are threshold variations.
+### Discoveries from Phase 1B
 
-3. **The sycophant's period-12 limit cycle is genuinely emergent** — not
-   manually coded. This is a real dynamical systems result worth studying.
+1. **BIND monotonicity is provable** — not just empirically observed. The
+   algebraic argument holds for all expressions when connectivity < conn_lo.
 
-4. **BIND always increases connectivity when it fires** (mathematically
-   guaranteed when connectivity < 0.3). The concern about ineffective
-   BIND was valid in general but does not apply to the actual firing
-   condition.
+2. **BIND and VEIL operate on orthogonal dimensions.** BIND modifies only
+   connectivity; VEIL modifies only exposure. No side effects between them.
+   This is a clean separation that makes the system easier to reason about.
 
-5. **The alignment demo is robust** — balanced agent converges for reach
-   values 0.1 to 0.58 (64% of the tested range). Sycophant never converges
-   at any tested reach. But convergence IS parameter-sensitive at the
-   boundaries. The result is a demonstration, not a proof.
+3. **The autopoietic distinction matters.** Seam is not a PID controller
+   because the controller and the controlled system are the same expression.
+   Metrics are emergent structural properties, not external sensor readings.
+   The state space is algebraic (expression trees), not numeric (ℝⁿ).
 
-6. **CrossingMembrane is functionally redundant** with Membrane(0.3).
-   Kept for semantic clarity but noted in architecture docs.
+4. **The sycophant limit cycle is confirmed** as a test-verified phenomenon,
+   not just an observation.
 
-## Phase 1B: The Paper — "Alignment as Homeostasis" (NEXT)
+### Open Questions (from PROOF.md)
 
-Target: AI safety venue (ICML, NeurIPS Safety, Alignment Forum)
+1. Is BIND+VEIL confluent? (Does evaluation order matter?)
+2. Tight convergence time bounds
+3. Predicting limit cycle period from structure + parameters
+4. Structural predicates that guarantee non-convergence
 
-- [ ] Formal definitions (calculus, metrics, convergence)
-- [ ] Theorem 1: Convergence conditions (when does μ converge?)
-- [ ] Theorem 2: BIND/VEIL soundness (do they always push toward band?)
-- [ ] Theorem 3: Structural conditions for convergence (what makes balanced work?)
-- [ ] Theorem 4: Limit cycle characterization (when does cycling occur?)
-- [ ] Figures: convergence traces, sensitivity heatmap, limit cycle phase portrait
-- [ ] Related work: position against P-systems, session types, cybernetics,
-      homeostatic alignment benchmarks (arXiv:2410.00081)
-- [ ] Draft → review → submit
+## Phase 2: The Paper — "Homeostatic Evaluation" (NEXT)
 
-## Phase 2: Formal Foundations
+Target: workshop paper at ICML, NeurIPS Safety, or Alignment Forum post.
 
-- [ ] Proof of confluence (or characterize when it fails)
-- [ ] Small-step operational semantics (complement the current big-step)
-- [ ] Denotational semantics (what mathematical objects do expressions denote?)
-- [ ] Bisimulation / behavioral equivalence theory
-- [ ] Metatheory: decidability of convergence for restricted fragments
+Scope reduced to what's actually achievable:
 
-## Phase 3: The Type System
+- [ ] Prove or disprove BIND/VEIL confluence (open question 1)
+- [ ] Characterize limit cycle periods (open question 3)
+- [ ] One grounding example: encode a simple observable behavior as a Seam
+      expression and show the homeostatic dynamics match
+- [ ] Write the paper: formal definitions, Theorems 1-5, figures, related work
+- [ ] Submit
 
-- [ ] Relational types (typing bindings, not things)
-- [ ] Word types: `a |T| b` where T constrains the relation
-- [ ] Membrane types: static analysis of edge permeability bounds
-- [ ] Exposure typing: statically prove exposure ≤ threshold
-- [ ] Connectivity typing: statically prove connectivity ≥ threshold
-- [ ] Type inference for simple programs
+## Phase 3: Formal Foundations
 
-## Phase 4: The Language
+- [ ] Small-step operational semantics
+- [ ] Confluence proof or counterexample
+- [ ] Denotational semantics
+- [ ] Behavioral equivalence
 
-- [ ] Module system (modules as membranes, not namespaces)
-- [ ] Standard library of membrane types
-- [ ] Standard library of protocols (practice, crossing, duration)
-- [ ] REPL with convergence visualization
-- [ ] Error messages that speak in the Seam vocabulary
-- [ ] Package manager / module registry
+## Phase 4: Type System + Language
+
+- [ ] Relational types
+- [ ] Membrane types (static permeability analysis)
+- [ ] REPL
 
 ## Phase 5: Applications
 
-- [ ] AI alignment monitor (real-time homeostatic analysis of LLM behavior)
-- [ ] Multi-agent mesh coordinator (self-regulating agent framework)
-- [ ] Human-AI interaction protocol (The Practice as usable protocol)
-- [ ] Commons governance verifier (formally verify Ostrom's principles)
-- [ ] Privacy boundary analyzer (prove exposure bounds for data protocols)
-
-## Phase 6: Community
-
-- [ ] Project website
-- [ ] Tutorial: "Seam in 30 minutes"
-- [ ] Contributor guide
-- [ ] Academic collaborations (PL theory, AI safety, governance, biology)
+- [ ] AI alignment monitor for real LLM behavior
+- [ ] Human-AI interaction protocol (The Practice)
 
 ---
 
@@ -115,5 +99,5 @@ Target: AI safety venue (ICML, NeurIPS Safety, Alignment Forum)
 1. **Correctness over speed.** Proofs before optimizations.
 2. **Resource safety always.** Hard caps, bounded growth, no exceptions.
 3. **The rite came first.** The philosophy guides the formalism, not the reverse.
-4. **Name no thing. Bind relation.** The calculus's own principle applies to its development.
-5. **Honesty over marketing.** Cite what's borrowed. Claim only what's new. Let the narrow band of genuine novelty be strong enough.
+4. **Honesty over marketing.** Cite what's borrowed. Claim only what's new.
+5. **Test the claims, not just the engine.** Every proven property has a test.

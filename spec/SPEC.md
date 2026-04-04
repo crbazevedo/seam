@@ -11,20 +11,23 @@ and evaluation is homeostatic.
 
 ## 1. Primitives
 
-Three primitives and one operator. No more.
+Four primitives and two derived formation rules.
 
-| Symbol | Name | Role |
-|--------|------|------|
-| `∅` | Silence | The empty ground. Identity of seam. |
-| `⊗` | Seam | Bilateral binding. Neither side owns it. |
-| `\|φ\|` | Edge | Adaptive membrane. Governs what passes. |
-| `μ` | Return | Homeostatic iteration. Drives time. |
+| | Symbol | Name | Role |
+|-|--------|------|------|
+| primitive | `∅` | Silence | The empty ground. Identity of seam. |
+| primitive | `⊗` | Seam | Bilateral binding. Commutative monoid. |
+| primitive | `\|φ\|` | Edge | Adaptive membrane. Governs what passes. |
+| primitive | `μ` | Return | Homeostatic iteration. Drives time. |
+| derived | `◊` | Witness | Non-consuming observation. Generative. |
+| derived | `[ ]` | Room | Capability-gated access. |
 
 The seam is the only primitive that creates structure.
 The edge is the only primitive that governs flow.
 The return is the only primitive that drives time.
-
-Everything else is derived.
+Witness and Room have dedicated evaluation rules but can be expressed
+as patterns over the primitives (witness = fresh variable + seam;
+room = edge with capability-based membrane).
 
 ## 2. Formation Rules
 

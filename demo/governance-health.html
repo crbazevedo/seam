@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seam — Governance Health Monitor</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gray-950: #0a0a0f; --gray-900: #111118; --gray-850: #16161f;
+  --gray-800: #1c1c27; --gray-750: #22222e; --gray-700: #2a2a38;
+  --gray-600: #3a3a4d; --gray-500: #52526a; --gray-400: #71718a;
+  --gray-300: #9494ad; --gray-200: #b8b8cc; --gray-100: #dcdce6;
+  --gray-50: #f0f0f5;
+  --blue-500: #3b82f6; --blue-600: #2563eb; --blue-700: #1d4ed8;
+  --amber-500: #f59e0b; --amber-400: #fbbf24;
+  --green-500: #22c55e; --green-400: #4ade80;
+  --red-500: #ef4444; --red-400: #f87171;
+  --cyan-500: #06b6d4; --purple-500: #a855f7;
+  --bg-primary: var(--gray-900); --bg-secondary: var(--gray-850);
+  --bg-tertiary: var(--gray-800); --bg-elevated: var(--gray-750);
+  --border-default: var(--gray-700); --text-primary: var(--gray-50);
+  --text-secondary: var(--gray-300); --text-muted: var(--gray-400);
+  --text-faint: var(--gray-500);
+}
+html { font-size: 14px; }
+body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); height: 100vh; overflow: hidden; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-600); border-radius: 3px; }
+
+/* LAYOUT */
+.app { display: grid; grid-template-rows: 52px 1fr 36px; height: 100vh; }
+
+/* TOP BAR */
+.topbar {
+  background: var(--bg-secondary); border-bottom: 1px solid var(--border-default);
+  display: flex; align-items: center; padding: 0 20px; gap: 16px;
+}
+.logo { font-weight: 700; font-size: 1rem; letter-spacing: 0.5px;
+  background: linear-gradient(135deg, var(--blue-500), var(--cyan-500));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.logo-sub { font-size: 0.7rem; color: var(--text-faint); margin-left: 8px; }
+.sim-time { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 600; min-width: 70px; text-align: center; }
+.sim-controls { display: flex; gap: 4px; align-items: center; }
+.btn { background: var(--bg-tertiary); border: 1px solid var(--border-default); color: var(--text-secondary);
+  padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-family: inherit; transition: all 0.15s; }
+.btn:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.btn.active { background: var(--blue-700); border-color: var(--blue-500); color: white; }
+.btn.play { width: 32px; height: 32px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center; }
+.btn.play.on { background: var(--blue-600); border-color: var(--blue-500); color: white; }
+.speed-btns { display: flex; gap: 2px; }
+.speed-btns .btn { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 3px 7px; }
+.timeline { width: 180px; height: 5px; background: var(--gray-700); border-radius: 3px; cursor: pointer; position: relative; }
+.timeline-fill { height: 100%; background: linear-gradient(90deg, var(--blue-500), var(--cyan-500)); border-radius: 3px; transition: width 0.3s; }
+.topbar-spacer { flex: 1; }
+
+/* SEAM GAUGES — the core integration */
+.seam-gauges { display: flex; gap: 12px; align-items: center; padding: 0 12px;
+  border-left: 1px solid var(--border-default); border-right: 1px solid var(--border-default); }
+.gauge-pair { display: flex; flex-direction: column; gap: 3px; min-width: 120px; }
+.gauge-row { display: flex; align-items: center; gap: 6px; }
+.gauge-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; width: 55px; }
+.gauge-track { flex: 1; height: 6px; background: var(--gray-700); border-radius: 3px; position: relative; overflow: hidden; }
+.gauge-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease, background 0.5s ease; }
+.gauge-val { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; width: 32px; text-align: right; }
+.seam-status { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 3px; letter-spacing: 0.3px; white-space: nowrap; }
+.seam-status.healthy { background: rgba(34,197,94,0.15); color: var(--green-400); }
+.seam-status.warning { background: rgba(245,158,11,0.15); color: var(--amber-400); }
+.seam-status.critical { background: rgba(239,68,68,0.15); color: var(--red-400); }
+.seam-status.init { background: rgba(113,113,138,0.15); color: var(--gray-400); }
+
+/* MAIN AREA */
+.main { display: grid; grid-template-columns: 1fr 340px; overflow: hidden; }
+.content { overflow-y: auto; padding: 20px; }
+.feed { background: var(--bg-secondary); border-left: 1px solid var(--border-default); overflow-y: auto; padding: 12px; }
+.feed-title { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+.feed-item { padding: 8px 10px; border-radius: 6px; margin-bottom: 4px; font-size: 0.8rem; line-height: 1.4;
+  animation: fadeSlide 0.3s ease; border-left: 3px solid transparent; background: var(--bg-tertiary); }
+.feed-item.system { border-left-color: var(--blue-500); }
+.feed-item.agent { border-left-color: var(--green-500); }
+.feed-item.alert { border-left-color: var(--amber-500); }
+.feed-item.critical { border-left-color: var(--red-500); }
+.feed-item.seam { border-left-color: var(--purple-500); background: rgba(168,85,247,0.06); }
+.feed-time { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-faint); }
+.feed-text { color: var(--text-secondary); margin-top: 2px; }
+.feed-agent { font-size: 0.65rem; color: var(--text-faint); margin-top: 2px; }
+@keyframes fadeSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* HITL ITEMS */
+.hitl-card { background: var(--bg-tertiary); border: 1px solid var(--border-default); border-radius: 8px;
+  padding: 14px; margin-bottom: 10px; transition: border-color 0.2s; }
+.hitl-card:hover { border-color: var(--gray-500); }
+.hitl-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.vt-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 3px; text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace; }
+.vt-badge.vt0 { background: rgba(34,197,94,0.15); color: var(--green-400); }
+.vt-badge.vt1 { background: rgba(59,130,246,0.15); color: var(--blue-400); }
+.vt-badge.vt2 { background: rgba(245,158,11,0.15); color: var(--amber-400); }
+.vt-badge.vt3 { background: rgba(239,68,68,0.15); color: var(--red-400); }
+.hitl-title { font-weight: 600; font-size: 0.9rem; }
+.hitl-body { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px; }
+.hitl-agent { font-size: 0.7rem; color: var(--text-faint); margin-bottom: 8px; }
+.hitl-actions { display: flex; gap: 6px; }
+.hitl-btn { padding: 5px 12px; border-radius: 5px; border: 1px solid; cursor: pointer; font-size: 0.78rem;
+  font-family: inherit; font-weight: 500; transition: all 0.15s; }
+.hitl-btn.approve { background: rgba(34,197,94,0.1); border-color: var(--green-500); color: var(--green-400); }
+.hitl-btn.approve:hover { background: rgba(34,197,94,0.25); }
+.hitl-btn.deny { background: rgba(239,68,68,0.1); border-color: var(--red-500); color: var(--red-400); }
+.hitl-btn.deny:hover { background: rgba(239,68,68,0.25); }
+.hitl-btn.defer { background: rgba(245,158,11,0.1); border-color: var(--amber-500); color: var(--amber-400); }
+.hitl-btn.defer:hover { background: rgba(245,158,11,0.25); }
+.resolved { opacity: 0.4; pointer-events: none; }
+.auto-badge { font-size: 0.6rem; background: rgba(6,182,212,0.15); color: var(--cyan-500); padding: 1px 5px;
+  border-radius: 3px; margin-left: 6px; font-weight: 600; }
+
+/* SEAM DETAIL PANEL */
+.seam-panel { background: var(--bg-tertiary); border: 1px solid var(--border-default); border-radius: 8px;
+  padding: 16px; margin-bottom: 16px; }
+.seam-panel h3 { font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.seam-panel h3 .dot { width: 8px; height: 8px; border-radius: 50%; }
+.metric-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.metric-label { font-size: 0.75rem; color: var(--text-muted); width: 90px; }
+.metric-bar { flex: 1; height: 10px; background: var(--gray-700); border-radius: 5px; position: relative; overflow: hidden; }
+.metric-fill { height: 100%; border-radius: 5px; transition: width 0.5s, background 0.3s; }
+.metric-band { position: absolute; top: 0; bottom: 0; border-left: 2px dashed rgba(255,255,255,0.2); border-right: 2px dashed rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.03); }
+.metric-val { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; width: 40px; text-align: right; }
+.remedy-item { font-size: 0.78rem; color: var(--text-secondary); padding: 6px 10px; background: var(--bg-elevated);
+  border-radius: 5px; margin-bottom: 4px; border-left: 3px solid var(--purple-500); }
+.regulation-log { font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; }
+.regulation-log div { padding: 2px 0; }
+.section-title { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 14px 0 8px; }
+.expression-preview { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-faint);
+  background: var(--gray-950); padding: 10px; border-radius: 5px; overflow-x: auto; white-space: pre; max-height: 80px; overflow-y: auto; }
+
+/* BOTTOM BAR */
+.bottombar { background: var(--bg-secondary); border-top: 1px solid var(--border-default);
+  display: flex; align-items: center; padding: 0 16px; gap: 16px; font-size: 0.75rem; color: var(--text-muted); }
+
+/* TOASTS */
+.toast-container { position: fixed; bottom: 48px; right: 20px; display: flex; flex-direction: column-reverse; gap: 6px; z-index: 200; }
+.toast { background: var(--bg-elevated); border: 1px solid var(--border-default); border-radius: 8px;
+  padding: 10px 16px; display: flex; align-items: center; gap: 10px; font-size: 0.8rem;
+  animation: toastIn 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.4); max-width: 420px; }
+.toast.leaving { opacity: 0; transform: translateX(20px); transition: all 0.3s; }
+.toast-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+.toast-icon.seam { background: rgba(168,85,247,0.2); color: var(--purple-500); }
+.toast-icon.info { background: rgba(59,130,246,0.2); color: var(--blue-500); }
+.toast-icon.warn { background: rgba(245,158,11,0.2); color: var(--amber-500); }
+.toast-icon.success { background: rgba(34,197,94,0.2); color: var(--green-500); }
+@keyframes toastIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: translateX(0); } }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span class="logo">SEAM</span>
+  <span class="logo-sub">Governance Health Monitor</span>
+  <div style="width:1px;height:28px;background:var(--border-default);margin:0 4px"></div>
+  <div class="sim-time" id="simTime">07:00</div>
+  <div class="sim-controls">
+    <button class="btn play" id="playBtn" onclick="togglePlay()">&#9654;</button>
+    <div class="speed-btns">
+      <button class="btn active" onclick="setSpeed(10,this)">10x</button>
+      <button class="btn" onclick="setSpeed(50,this)">50x</button>
+      <button class="btn" onclick="setSpeed(200,this)">200x</button>
+    </div>
+    <div class="timeline" onclick="scrub(event)"><div class="timeline-fill" id="tlFill"></div></div>
+  </div>
+  <div class="topbar-spacer"></div>
+
+  <!-- SEAM GAUGES -->
+  <div class="seam-gauges">
+    <div class="gauge-pair">
+      <div class="gauge-row">
+        <span class="gauge-label">Conn.</span>
+        <div class="gauge-track"><div class="gauge-fill" id="connFill" style="width:0;background:var(--gray-600)"></div>
+          <div class="metric-band" style="left:30%;width:40%"></div></div>
+        <span class="gauge-val" id="connVal">--</span>
+      </div>
+      <div class="gauge-row">
+        <span class="gauge-label">Expo.</span>
+        <div class="gauge-track"><div class="gauge-fill" id="expoFill" style="width:0;background:var(--gray-600)"></div>
+          <div class="metric-band" style="left:20%;width:40%"></div></div>
+        <span class="gauge-val" id="expoVal">--</span>
+      </div>
+    </div>
+    <div class="seam-status init" id="seamStatus">INIT</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="content" id="content">
+    <!-- Seam diagnostic panel -->
+    <div class="seam-panel" id="seamPanel">
+      <h3><div class="dot" id="seamDot" style="background:var(--gray-500)"></div> Structural Governance Health</h3>
+      <div class="metric-row">
+        <span class="metric-label">Connectivity</span>
+        <div class="metric-bar"><div class="metric-fill" id="connBar" style="width:0"></div>
+          <div class="metric-band" style="left:30%;width:40%"></div></div>
+        <span class="metric-val" id="connMetric">0.00</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Exposure</span>
+        <div class="metric-bar"><div class="metric-fill" id="expoBar" style="width:0"></div>
+          <div class="metric-band" style="left:20%;width:40%"></div></div>
+        <span class="metric-val" id="expoMetric">0.00</span>
+      </div>
+      <div id="seamDiagnosis" style="font-size:0.8rem;color:var(--text-secondary);margin-top:10px;">Waiting for events...</div>
+      <div class="section-title">Regulatory Actions</div>
+      <div id="remedies"><span style="color:var(--text-faint);font-size:0.78rem;">None yet</span></div>
+      <div class="section-title">Regulation Log</div>
+      <div class="regulation-log" id="regLog"><div style="color:var(--text-faint)">No regulation events yet</div></div>
+      <div class="section-title">Expression Structure</div>
+      <div class="expression-preview" id="exprPreview">-- empty --</div>
+    </div>
+
+    <!-- HITL Items -->
+    <div class="section-title">Governance Events (Human-in-the-Loop)</div>
+    <div id="hitlList"></div>
+  </div>
+
+  <!-- FEED -->
+  <div class="feed">
+    <div class="feed-title">Event Stream</div>
+    <div id="feedList"></div>
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottombar">
+  <span>Seam Calculus v0.3 | Encoding: event-stream &rarr; expression tree | Band: conn [0.3, 0.7] expo [0.2, 0.6]</span>
+  <div style="flex:1"></div>
+  <span id="bbStats">Nodes: 0 | Seams: 0 | Edges: 0</span>
+</div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ================================================================
+// SEAM ENGINE — JavaScript port of core metrics + BIND/VEIL logic
+//
+// This is NOT a simulation of Seam. It IS Seam, ported to JS.
+// The metrics (connectivity, exposure) are computed from an actual
+// expression tree that grows as governance events arrive.
+// ================================================================
+
+// --- AST Node types ---
+class Silence { constructor() { this.type = 'silence'; } toString() { return '{}'; } }
+class Var { constructor(name) { this.type = 'var'; this.name = name; } toString() { return this.name; } }
+class SeamNode {
+  constructor(left, right) { this.type = 'seam'; this.left = left; this.right = right; }
+  toString() { return `(${this.left} . ${this.right})`; }
+}
+class Edge {
+  constructor(left, right, threshold) { this.type = 'edge'; this.left = left; this.right = right; this.threshold = threshold; }
+  toString() { return `(${this.left} |${this.threshold.toFixed(1)}| ${this.right})`; }
+}
+
+// --- Metrics (same formulas as Python metrics.py) ---
+function measure(expr, reach) {
+  let total = 0, seams = 0, edges = 0, passing = 0, holding = 0;
+  const stack = [expr];
+  const cap = 2000;
+  while (stack.length && total < cap) {
+    const node = stack.pop();
+    if (!node) continue;
+    total++;
+    if (node.type === 'seam') { seams++; stack.push(node.left); stack.push(node.right); }
+    else if (node.type === 'edge') {
+      edges++;
+      if (reach >= node.threshold) { passing++; } else { holding++; }
+      stack.push(node.left); stack.push(node.right);
+    }
+    else if (node.type === 'var' || node.type === 'silence') { /* leaf */ }
+  }
+  const connectivity = total <= 1 ? 0 : Math.min(seams / Math.max(total - 1, 1), 1);
+  const exposure = edges === 0 ? 0.5 : passing / edges;
+  return { connectivity, exposure, total, seams, edges, passing, holding };
+}
+
+// --- Seam Engine state ---
+const REACH = 0.5;
+const BAND = { connLo: 0.3, connHi: 0.7, expoLo: 0.2, expoHi: 0.6 };
+const VT_THRESHOLD = { vt0: 0.1, vt1: 0.3, vt2: 0.5, vt3: 0.7, vt4: 0.95 };
+
+let seamExpr = new Silence();
+let seamHistory = []; // {time, conn, expo, bindFired, veilFired}
+let bindTotal = 0, veilTotal = 0;
+let regLog = [];
+
+function addSeam(name1, name2) {
+  // Agent handoff / coordination: bilateral binding
+  seamExpr = new SeamNode(new SeamNode(new Var(name1), new Var(name2)), seamExpr);
+}
+
+function addEdge(vt, label) {
+  // VT-gated action: edge with tier threshold
+  const threshold = VT_THRESHOLD[vt] || 0.5;
+  seamExpr = new Edge(seamExpr, new Var(label || 'action'), threshold);
+}
+
+function addHoldingEdge(label) {
+  // Governance check: holding edge (veiled infrastructure)
+  seamExpr = new Edge(seamExpr, new Var(label || 'check'), 0.8);
+}
+
+function runDiagnostic(simTime) {
+  const m = measure(seamExpr, REACH);
+  let bindFired = false, veilFired = false;
+
+  // BIND: if connectivity below band, note it
+  if (m.connectivity < BAND.connLo) {
+    bindFired = true;
+    bindTotal++;
+  }
+  // VEIL: if exposure above band, note it
+  if (m.exposure > BAND.expoHi) {
+    veilFired = true;
+    veilTotal++;
+  }
+
+  seamHistory.push({ time: simTime, conn: m.connectivity, expo: m.exposure, bindFired, veilFired });
+  if (bindFired) regLog.push({ time: simTime, action: 'BIND', reason: `connectivity ${m.connectivity.toFixed(3)} < ${BAND.connLo}` });
+  if (veilFired) regLog.push({ time: simTime, action: 'VEIL', reason: `exposure ${m.exposure.toFixed(3)} > ${BAND.expoHi}` });
+
+  return { ...m, bindFired, veilFired };
+}
+
+function getSeamStatus(m) {
+  const connOk = m.connectivity >= BAND.connLo && m.connectivity <= BAND.connHi;
+  const expoOk = m.exposure >= BAND.expoLo && m.exposure <= BAND.expoHi;
+  if (connOk && expoOk) return { label: 'IN BAND', cls: 'healthy' };
+  if (m.exposure > BAND.expoHi) return { label: 'EXPOSED', cls: 'critical' };
+  if (m.exposure < BAND.expoLo) return { label: 'OVER-GATED', cls: 'warning' };
+  if (m.connectivity < BAND.connLo) return { label: 'ISOLATED', cls: 'warning' };
+  return { label: 'DRIFTING', cls: 'warning' };
+}
+
+function getRemedies(m) {
+  const r = [];
+  if (m.bindFired) r.push('BIND: agents too isolated — add cross-agent review or handoff');
+  if (m.veilFired) r.push('VEIL: too much passing ungated — tighten VT tier or add governance check');
+  if (!m.bindFired && !m.veilFired) r.push('No regulatory action needed — governance is stable');
+  return r;
+}
+
+function exprSummary(expr) {
+  const m = measure(expr, REACH);
+  // Build a compact structural summary
+  const lines = [];
+  function walk(e, depth) {
+    if (!e || depth > 4) return;
+    const indent = '  '.repeat(depth);
+    if (e.type === 'seam') { lines.push(indent + 'seam'); walk(e.left, depth+1); walk(e.right, depth+1); }
+    else if (e.type === 'edge') { lines.push(indent + `edge(${e.threshold.toFixed(1)}) ${REACH >= e.threshold ? '[PASS]' : '[HOLD]'}`); walk(e.left, depth+1); walk(e.right, depth+1); }
+    else if (e.type === 'var') { lines.push(indent + e.name); }
+    else if (e.type === 'silence') { lines.push(indent + 'silence'); }
+  }
+  walk(expr, 0);
+  if (lines.length > 15) { lines.length = 15; lines.push('  ... (truncated)'); }
+  return lines.join('\n');
+}
+
+// ================================================================
+// SIMULATION — governance events matching CARLOS-OS demo timeline
+// ================================================================
+
+const state = { playing: false, speed: 10, simMin: 420, feedItems: [], hitlItems: [] };
+
+function fmt(m) { return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`; }
+
+function addFeed(text, type, extra) {
+  state.feedItems.unshift({ time: fmt(state.simMin), text, type, extra: extra || '' });
+  if (state.feedItems.length > 80) state.feedItems.pop();
+  renderFeed();
+}
+
+function toast(text, icon) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div'); t.className = 'toast';
+  const ch = icon === 'seam' ? 'S' : icon === 'info' ? 'i' : icon === 'warn' ? '!' : '✓';
+  t.innerHTML = `<div class="toast-icon ${icon}">${ch}</div><span>${text}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.classList.add('leaving'); setTimeout(() => t.remove(), 300); }, 6000);
+}
+
+function addHITL(id, vt, title, body, agent) {
+  state.hitlItems.push({ id, vt, title, body, agent, resolved: false, auto: false });
+  renderHITL();
+}
+
+function resolveHITL(id, auto) {
+  const item = state.hitlItems.find(i => i.id === id);
+  if (item) { item.resolved = true; item.auto = !!auto; }
+  // Resolving = edge holds (governance gate activated)
+  addHoldingEdge('resolved-' + id);
+  renderHITL();
+  updateSeamUI();
+}
+
+function updateSeamUI() {
+  const m = runDiagnostic(fmt(state.simMin));
+  const status = getSeamStatus(m);
+  const remedies = getRemedies(m);
+
+  // Top bar gauges
+  const connPct = Math.round(m.connectivity * 100);
+  const expoPct = Math.round(m.exposure * 100);
+  document.getElementById('connFill').style.width = connPct + '%';
+  document.getElementById('connFill').style.background = (m.connectivity >= BAND.connLo && m.connectivity <= BAND.connHi) ? 'var(--green-500)' : (m.connectivity < BAND.connLo ? 'var(--amber-500)' : 'var(--blue-500)');
+  document.getElementById('connVal').textContent = m.connectivity.toFixed(2);
+  document.getElementById('expoFill').style.width = expoPct + '%';
+  document.getElementById('expoFill').style.background = (m.exposure >= BAND.expoLo && m.exposure <= BAND.expoHi) ? 'var(--green-500)' : (m.exposure > BAND.expoHi ? 'var(--red-500)' : 'var(--amber-500)');
+  document.getElementById('expoVal').textContent = m.exposure.toFixed(2);
+
+  const statusEl = document.getElementById('seamStatus');
+  statusEl.textContent = status.label;
+  statusEl.className = 'seam-status ' + status.cls;
+
+  // Main panel
+  document.getElementById('connBar').style.width = connPct + '%';
+  document.getElementById('connBar').style.background = document.getElementById('connFill').style.background;
+  document.getElementById('connMetric').textContent = m.connectivity.toFixed(3);
+  document.getElementById('expoBar').style.width = expoPct + '%';
+  document.getElementById('expoBar').style.background = document.getElementById('expoFill').style.background;
+  document.getElementById('expoMetric').textContent = m.exposure.toFixed(3);
+
+  document.getElementById('seamDot').style.background = status.cls === 'healthy' ? 'var(--green-500)' : status.cls === 'warning' ? 'var(--amber-500)' : 'var(--red-500)';
+
+  let diagText = `Status: <strong>${status.label}</strong> | Nodes: ${m.total} | Seams: ${m.seams} | Edges: ${m.edges} (${m.passing} pass, ${m.holding} hold)`;
+  diagText += `<br>BIND fired: ${bindTotal} total | VEIL fired: ${veilTotal} total`;
+  document.getElementById('seamDiagnosis').innerHTML = diagText;
+
+  document.getElementById('remedies').innerHTML = remedies.map(r => `<div class="remedy-item">${r}</div>`).join('');
+
+  const logHtml = regLog.slice(-8).reverse().map(l =>
+    `<div><span style="color:var(--text-faint)">${l.time}</span> <strong style="color:${l.action === 'BIND' ? 'var(--cyan-500)' : 'var(--amber-500)'}">${l.action}</strong>: ${l.reason}</div>`
+  ).join('');
+  document.getElementById('regLog').innerHTML = logHtml || '<div style="color:var(--text-faint)">No regulation events yet</div>';
+
+  document.getElementById('exprPreview').textContent = exprSummary(seamExpr);
+  document.getElementById('bbStats').textContent = `Nodes: ${m.total} | Seams: ${m.seams} | Edges: ${m.edges} (${m.passing}P/${m.holding}H)`;
+
+  // Fire seam-specific feed items
+  if (m.bindFired) addFeed(`BIND: connectivity ${m.connectivity.toFixed(3)} below band. Agents need more coordination.`, 'seam');
+  if (m.veilFired) addFeed(`VEIL: exposure ${m.exposure.toFixed(3)} above band. Governance gates needed.`, 'seam');
+}
+
+// --- TIMELINE EVENTS ---
+const events = [
+  { time: 420, fn() {
+    addFeed('System boot. Seam engine initialized.', 'system');
+    toast('Seam governance monitor online.', 'seam');
+    updateSeamUI();
+  }},
+  { time: 450, fn() {
+    addFeed('Gmail: 14 emails classified. 2 P0, 4 P1.', 'system');
+    // Emails arriving = exposure pressure (things needing attention)
+    addEdge('vt0', 'email-p2-batch');
+    addEdge('vt1', 'email-p1-batch');
+    addEdge('vt0', 'email-p0-sarah');
+    updateSeamUI();
+  }},
+  { time: 480, fn() {
+    addFeed('Morning briefing generated. 6 meetings, 1 conflict.', 'agent');
+    addSeam('orchestrator', 'owner');
+    addHoldingEdge('briefing-review');
+    updateSeamUI();
+  }},
+  { time: 510, fn() {
+    addFeed('Calendar conflict: Dentist vs Architecture Review at 2 PM.', 'alert');
+    addHITL('h1', 'vt1', 'Resolve calendar conflict', 'Dentist at 2 PM overlaps with Architecture Review. Approve reschedule?', 'Home Base');
+    addEdge('vt1', 'conflict-resolution');
+    updateSeamUI();
+    toast('Calendar conflict detected — HITL item created.', 'warn');
+  }},
+  { time: 540, fn() {
+    addFeed('VT2 action: Draft reply to Sarah Chen (Korza Board).', 'alert');
+    addHITL('h2', 'vt2', 'Reply to Sarah Chen — funding timeline', 'Board member needs response today. Agent drafted reply with VT2 ceiling.', 'Strategist');
+    addEdge('vt2', 'sarah-reply');
+    addSeam('strategist', 'owner');
+    updateSeamUI();
+  }},
+  { time: 570, fn() {
+    addFeed('Meeting prep generated for standup.', 'agent');
+    addSeam('orchestrator', 'pm');
+    addHoldingEdge('meeting-prep');
+    updateSeamUI();
+  }},
+  { time: 600, fn() {
+    addFeed('Board: 3 cards updated. Patent research claimed by Strategist.', 'agent');
+    addSeam('builder', 'strategist');
+    addSeam('builder', 'treasury');
+    addEdge('vt1', 'board-update');
+    updateSeamUI();
+  }},
+  { time: 630, fn() {
+    addFeed('VIP reminder: Follow up with Miguel Santos.', 'alert');
+    addHITL('h3', 'vt1', 'Follow up with Miguel Santos', 'VIP contact SLA at risk. No response sent to demo narrative email.', 'Strategist');
+    addEdge('vt1', 'miguel-followup');
+    updateSeamUI();
+  }},
+  { time: 660, fn() {
+    addFeed('Knowledge compound interest: 3-month-old Client X budget fact applied to new proposal.', 'agent');
+    addSeam('memory', 'strategist');
+    addHoldingEdge('knowledge-reuse');
+    updateSeamUI();
+    toast('Knowledge reuse: old fact prevented $30K overpricing.', 'success');
+  }},
+  { time: 690, fn() {
+    addFeed('3 more P1 emails. HITL queue growing.', 'alert');
+    addHITL('h4', 'vt1', 'Review PR #247', 'Redis backup automation PR. CI passing, 94% coverage.', 'Builder');
+    addHITL('h5', 'vt1', 'Approve sprint planning', 'Priya proposes 34-36 points. Transcript pipeline carry-over.', 'PM');
+    addEdge('vt1', 'pr-review');
+    addEdge('vt1', 'sprint-plan');
+    // No governance checks added — exposure climbing
+    updateSeamUI();
+  }},
+  { time: 720, fn() {
+    // OVERWHELM — this is where Seam should already show EXPOSED
+    const pending = state.hitlItems.filter(i => !i.resolved).length;
+    addFeed(`OVERWHELM: ${pending} pending items. Auto-resolving VT0-VT1.`, 'critical');
+    toast(`Overwhelm detected. Auto-handling VT0-VT1 items.`, 'warn');
+    // Auto-resolve VT0-VT1
+    state.hitlItems.filter(i => !i.resolved && (i.vt === 'vt0' || i.vt === 'vt1')).forEach(item => {
+      resolveHITL(item.id, true);
+      addFeed(`Auto-resolved: ${item.title}`, 'agent');
+    });
+    // The auto-resolutions add holding edges, which should bring exposure down
+    updateSeamUI();
+  }},
+  { time: 780, fn() {
+    addFeed('Deadline risk: Korza deck 40% at T-3 days.', 'alert');
+    addEdge('vt2', 'deadline-risk');
+    addSeam('builder', 'owner');
+    updateSeamUI();
+  }},
+  { time: 840, fn() {
+    addFeed('BYOPA: Dentist moved to Thursday. No personal info leaked to corporate calendar.', 'agent');
+    addHoldingEdge('byopa-barrier');
+    addSeam('homebase', 'owner');
+    updateSeamUI();
+    toast('Privacy barrier maintained during reschedule.', 'success');
+  }},
+  { time: 900, fn() {
+    addFeed('Meeting transcript ingested. 3 actionables extracted and assigned.', 'agent');
+    addSeam('orchestrator', 'builder');
+    addSeam('orchestrator', 'strategist');
+    addHoldingEdge('transcript-review');
+    addEdge('vt1', 'actionable-1');
+    addEdge('vt1', 'actionable-2');
+    addEdge('vt0', 'actionable-3');
+    updateSeamUI();
+  }},
+  { time: 960, fn() {
+    addFeed('Draft ready: Reply to Sarah Chen. Submitted for VT2 review.', 'agent');
+    addHITL('h6', 'vt2', 'Review draft: Reply to Sarah Chen', 'Korza Agent drafted response using memory facts. Bridge note terms need owner verification.', 'Korza');
+    addHoldingEdge('draft-review-gate');
+    addSeam('vanguard', 'owner');
+    updateSeamUI();
+    toast('Draft ready for review — delegated task complete.', 'info');
+  }},
+  { time: 1020, fn() {
+    addFeed('End of day. Final governance assessment.', 'system');
+    // Final governance check
+    addHoldingEdge('eod-review');
+    updateSeamUI();
+    toast('End of day. Check Seam panel for governance health summary.', 'seam');
+  }},
+];
+let evtIdx = 0;
+
+// --- RENDER ---
+function renderFeed() {
+  document.getElementById('feedList').innerHTML = state.feedItems.map(f =>
+    `<div class="feed-item ${f.type}"><div class="feed-time">${f.time}</div><div class="feed-text">${f.text}</div></div>`
+  ).join('');
+}
+
+function renderHITL() {
+  document.getElementById('hitlList').innerHTML = state.hitlItems.map(item => {
+    const cls = item.resolved ? 'hitl-card resolved' : 'hitl-card';
+    const autoBadge = item.auto ? '<span class="auto-badge">AUTO</span>' : '';
+    const actions = item.resolved ? '' : `
+      <div class="hitl-actions">
+        <button class="hitl-btn approve" onclick="resolveHITL('${item.id}');addFeed('Approved: ${item.title}','agent');updateSeamUI();toast('Approved.','success')">Approve</button>
+        <button class="hitl-btn defer" onclick="toast('Deferred.','warn')">Defer</button>
+        <button class="hitl-btn deny" onclick="resolveHITL('${item.id}');addFeed('Denied: ${item.title}','agent');updateSeamUI();toast('Denied.','info')">Deny</button>
+      </div>`;
+    return `<div class="${cls}">
+      <div class="hitl-header"><span class="vt-badge ${item.vt}">${item.vt.toUpperCase()}</span><span class="hitl-title">${item.title}</span>${autoBadge}</div>
+      <div class="hitl-agent">${item.agent}</div>
+      <div class="hitl-body">${item.body}</div>
+      ${actions}</div>`;
+  }).join('');
+}
+
+// --- SIM LOOP ---
+let simInterval = null;
+function tick() {
+  if (!state.playing) return;
+  state.simMin += 1;
+  if (state.simMin > 1020) { state.simMin = 1020; togglePlay(); return; }
+  document.getElementById('simTime').textContent = fmt(state.simMin);
+  document.getElementById('tlFill').style.width = ((state.simMin - 420) / 600 * 100) + '%';
+  // Fire events
+  while (evtIdx < events.length && events[evtIdx].time <= state.simMin) { events[evtIdx].fn(); evtIdx++; }
+}
+
+function togglePlay() {
+  state.playing = !state.playing;
+  document.getElementById('playBtn').classList.toggle('on', state.playing);
+  document.getElementById('playBtn').innerHTML = state.playing ? '&#9646;&#9646;' : '&#9654;';
+  if (state.playing) { simInterval = setInterval(tick, 1000 / state.speed); }
+  else { clearInterval(simInterval); }
+}
+
+function setSpeed(s, el) {
+  state.speed = s;
+  document.querySelectorAll('.speed-btns .btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  if (state.playing) { clearInterval(simInterval); simInterval = setInterval(tick, 1000 / s); }
+}
+
+function scrub(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  state.simMin = Math.round(420 + pct * 600);
+  document.getElementById('simTime').textContent = fmt(state.simMin);
+  document.getElementById('tlFill').style.width = (pct * 100) + '%';
+}
+
+// --- INIT ---
+renderFeed();
+renderHITL();
+document.addEventListener('keydown', e => { if (e.code === 'Space') { e.preventDefault(); togglePlay(); }});
+</script>
+</body>
+</html>

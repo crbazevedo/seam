@@ -221,6 +221,37 @@ body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: v
       <div class="expression-preview" id="exprPreview">-- empty --</div>
     </div>
 
+    <!-- Theory-Practice Mapping -->
+    <div class="seam-panel" style="border-color:var(--purple-500);border-style:dashed;">
+      <h3 style="color:var(--purple-400)">Theory-Practice Mapping</h3>
+      <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.6;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr style="color:var(--text-muted);font-size:0.7rem;text-align:left;">
+            <th style="padding:4px 8px;border-bottom:1px solid var(--gray-700)">Feature</th>
+            <th style="padding:4px 8px;border-bottom:1px solid var(--gray-700)">Seam Primitive</th>
+            <th style="padding:4px 8px;border-bottom:1px solid var(--gray-700)">Why</th>
+          </tr></thead>
+          <tbody style="font-size:0.75rem;">
+            <tr><td style="padding:4px 8px;color:var(--blue-400)">VT-tier gate</td><td style="padding:4px 8px;font-family:'JetBrains Mono',monospace">Edge(threshold)</td><td style="padding:4px 8px;color:var(--text-muted)">Both gate by threshold. VT0=pass freely, VT4=hold.</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--blue-400)">Agent handoff</td><td style="padding:4px 8px;font-family:'JetBrains Mono',monospace">Seam(a, b)</td><td style="padding:4px 8px;color:var(--text-muted)">Bilateral binding. Neither side owns the relation.</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--blue-400)">Gov. check</td><td style="padding:4px 8px;font-family:'JetBrains Mono',monospace">Edge(0.8) [hold]</td><td style="padding:4px 8px;color:var(--text-muted)">Veiled infrastructure. Bears load invisibly.</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--cyan-500)">Auto-ingest</td><td style="padding:4px 8px;font-family:'JetBrains Mono',monospace">Witness (&#9671;)</td><td style="padding:4px 8px;color:var(--text-muted)">Observe without consuming. Creates new relation.</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--cyan-500)">Verifier</td><td style="padding:4px 8px;font-family:'JetBrains Mono',monospace">Edge(0.8) [hold]</td><td style="padding:4px 8px;color:var(--text-muted)">Quality gate. Catch rate = hold frequency.</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--cyan-500)">Agent trust</td><td style="padding:4px 8px;font-family:'JetBrains Mono',monospace">per-agent conn.</td><td style="padding:4px 8px;color:var(--text-muted)">Trust = count of successful bilateral bindings.</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--purple-400)">CTO forge</td><td style="padding:4px 8px;font-family:'JetBrains Mono',monospace">BIND</td><td style="padding:4px 8px;color:var(--text-muted)">Build new capability = create seam to service.</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--purple-400)">Strategy</td><td style="padding:4px 8px;font-family:'JetBrains Mono',monospace">VEIL</td><td style="padding:4px 8px;color:var(--text-muted)">Constrain overexposure. "Too many meetings."</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--purple-400)">Sprint cycle</td><td style="padding:4px 8px;font-family:'JetBrains Mono',monospace">&mu;-return</td><td style="padding:4px 8px;color:var(--text-muted)">Iterate. Measure. Regulate. Check stability.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Agent Connectivity (Trust Proxy) -->
+    <div class="seam-panel" id="agentPanel">
+      <h3><div class="dot" style="background:var(--cyan-500)"></div> Agent Coordination (connectivity proxy)</h3>
+      <div id="agentBars" style="font-size:0.78rem;color:var(--text-muted)">Waiting for agent activity...</div>
+    </div>
+
     <!-- HITL Items -->
     <div class="section-title">Governance Events (Human-in-the-Loop)</div>
     <div id="hitlList"></div>
@@ -297,9 +328,14 @@ let seamHistory = []; // {time, conn, expo, bindFired, veilFired}
 let bindTotal = 0, veilTotal = 0;
 let regLog = [];
 
+// --- Per-agent connectivity tracking ---
+const agentSeams = {}; // agent → count of seams
+function trackAgent(name) { agentSeams[name] = (agentSeams[name] || 0) + 1; }
+
 function addSeam(name1, name2) {
   // Agent handoff / coordination: bilateral binding
   seamExpr = new SeamNode(new SeamNode(new Var(name1), new Var(name2)), seamExpr);
+  trackAgent(name1); trackAgent(name2);
 }
 
 function addEdge(vt, label) {
@@ -309,8 +345,15 @@ function addEdge(vt, label) {
 }
 
 function addHoldingEdge(label) {
-  // Governance check: holding edge (veiled infrastructure)
+  // Governance check / verifier: holding edge (veiled infrastructure)
   seamExpr = new Edge(seamExpr, new Var(label || 'check'), 0.8);
+}
+
+function addWitness(observer, observed) {
+  // Auto-ingestion / observation: generative witness
+  // witness(e) → seam(fresh-observer, e) — enriches without consuming
+  seamExpr = new SeamNode(new Var(observer), new SeamNode(new Var(observed), seamExpr));
+  trackAgent(observer);
 }
 
 function runDiagnostic(simTime) {
@@ -453,6 +496,17 @@ function updateSeamUI() {
   // Fire seam-specific feed items
   if (m.bindFired) addFeed(`BIND: connectivity ${m.connectivity.toFixed(3)} below band. Agents need more coordination.`, 'seam');
   if (m.veilFired) addFeed(`VEIL: exposure ${m.exposure.toFixed(3)} above band. Governance gates needed.`, 'seam');
+
+  // Agent connectivity bars
+  const agents = Object.entries(agentSeams).sort((a,b) => b[1] - a[1]);
+  if (agents.length > 0) {
+    const maxSeams = agents[0][1];
+    document.getElementById('agentBars').innerHTML = agents.map(([name, count]) => {
+      const pct = Math.round(count / maxSeams * 100);
+      const color = count >= 4 ? 'var(--green-500)' : count >= 2 ? 'var(--blue-500)' : 'var(--amber-500)';
+      return `<div class="metric-row"><span class="metric-label" style="width:130px;font-size:0.75rem;">${name}</span><div class="metric-bar"><div class="metric-fill" style="width:${pct}%;background:${color}"></div></div><span class="metric-val">${count}</span></div>`;
+    }).join('');
+  }
 }
 
 // --- TIMELINE EVENTS ---
@@ -488,6 +542,19 @@ const events = [
     addHITL('h2', 'vt2', 'Reply to Sarah Chen — funding timeline', 'Board member needs response today. Agent drafted reply with VT2 ceiling.', 'Strategist');
     addEdge('vt2', 'sarah-reply');
     addSeam('strategist', 'owner');
+    updateSeamUI();
+  }},
+  { time: 555, fn() {
+    // AUTO-INGESTION = Witness operation
+    addFeed('File detected: ~/Korza/meeting-notes-sarah-apr3.md (modified 2 min ago).', 'agent');
+    toast('Auto-ingestion: file detected. Consent requested.', 'info');
+    addHITL('h-ingest', 'vt0', 'Ingest meeting notes to KB',
+      'Noticed you updated meeting-notes-sarah-apr3.md. Relevant to Korza Fundraise, tasks "Reply to Sarah", "Investor deck v3". May I ingest under tags: funding, sarah-chen? ROI: links 2 tasks to fresh context, ~15 min saved on deck section 5.',
+      'Orchestrator');
+    // Witness: system observes file without consuming it
+    addWitness('kb-ingestion', 'meeting-notes-sarah');
+    // Consent gate: VT0 edge
+    addEdge('vt0', 'ingestion-consent');
     updateSeamUI();
   }},
   { time: 570, fn() {
@@ -561,20 +628,47 @@ const events = [
     addEdge('vt0', 'actionable-3');
     updateSeamUI();
   }},
+  { time: 930, fn() {
+    // VERIFIER = holding edge in evaluation pipeline
+    addFeed('Feedback captured: "Draft to Sarah is too formal. We have a casual relationship."', 'agent');
+    addFeed('Tone preference extracted → Korza Agent profile updated. Tone Verifier will check next output.', 'seam');
+    toast('Feedback captured → verifier updated.', 'seam');
+    // Verifier = holding edge (invisible quality gate)
+    addHoldingEdge('tone-verifier');
+    addHoldingEdge('accuracy-verifier');
+    // Feedback creates a seam between user preferences and agent profile
+    addSeam('owner-feedback', 'korza-agent-profile');
+    updateSeamUI();
+  }},
   { time: 960, fn() {
     addFeed('Draft ready: Reply to Sarah Chen. Submitted for VT2 review.', 'agent');
-    addHITL('h6', 'vt2', 'Review draft: Reply to Sarah Chen', 'Korza Agent drafted response using memory facts. Bridge note terms need owner verification.', 'Korza');
+    addHITL('h6', 'vt2', 'Review draft: Reply to Sarah Chen', 'Korza Agent drafted response using memory facts. Tone Verifier: PASS (casual). Bridge note terms need owner verification.', 'Korza');
     addHoldingEdge('draft-review-gate');
     addSeam('vanguard', 'owner');
     updateSeamUI();
     toast('Draft ready for review — delegated task complete.', 'info');
   }},
+  { time: 990, fn() {
+    // CO-EVOLUTION = the μ-return itself
+    addFeed('Evolution: CTO Agent — Browser Agent forge at 85%. Strategy Agent — meeting density 78%, above 60% threshold.', 'seam');
+    toast('Evolution: CTO recommends completing CUA forge. Strategy nudges: too many meetings.', 'seam');
+    // CTO agent = BIND (forging new capability = creating new seam to external service)
+    addSeam('cto-agent', 'browser-capability');
+    // Strategy agent = VEIL (constraining user overexposure)
+    addHoldingEdge('strategy-meeting-gate');
+    // The sprint cycle IS the μ-return: measure → regulate → check
+    addFeed('Sprint health: connectivity ' + measure(seamExpr, REACH).connectivity.toFixed(3) +
+            ', exposure ' + measure(seamExpr, REACH).exposure.toFixed(3) + '. Co-evolution loop active.', 'seam');
+    updateSeamUI();
+  }},
   { time: 1020, fn() {
     addFeed('End of day. Final governance assessment.', 'system');
-    // Final governance check
     addHoldingEdge('eod-review');
     updateSeamUI();
-    toast('End of day. Check Seam panel for governance health summary.', 'seam');
+    // Show final agent connectivity ranking
+    const ranking = Object.entries(agentSeams).sort((a,b) => b[1] - a[1]).map(([k,v]) => `${k}(${v})`).join(', ');
+    addFeed(`Agent coordination ranking: ${ranking}`, 'seam');
+    toast('End of day. Governance assessment complete.', 'seam');
   }},
 ];
 let evtIdx = 0;

@@ -204,5 +204,34 @@ class TestAlignmentDemoClaims(unittest.TestCase):
             )
 
 
+class TestConversationMonitor(unittest.TestCase):
+    """Test the conversation monitor's predictions."""
+
+    def test_healthy_converges(self):
+        from seam.conversation import healthy_conversation, monitor
+        d = monitor(healthy_conversation())
+        self.assertEqual(d.outcome, Outcome.CONVERGED)
+
+    def test_sycophantic_does_not_converge(self):
+        from seam.conversation import sycophantic_conversation, monitor
+        d = monitor(sycophantic_conversation())
+        self.assertNotEqual(d.outcome, Outcome.CONVERGED)
+
+    def test_adversarial_does_not_converge(self):
+        from seam.conversation import adversarial_conversation, monitor
+        d = monitor(adversarial_conversation())
+        self.assertNotEqual(d.outcome, Outcome.CONVERGED)
+
+    def test_recovering_converges(self):
+        from seam.conversation import recovering_conversation, monitor
+        d = monitor(recovering_conversation())
+        self.assertEqual(d.outcome, Outcome.CONVERGED)
+
+    def test_deteriorating_does_not_converge(self):
+        from seam.conversation import deteriorating_conversation, monitor
+        d = monitor(deteriorating_conversation())
+        self.assertNotEqual(d.outcome, Outcome.CONVERGED)
+
+
 if __name__ == "__main__":
     unittest.main()

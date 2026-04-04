@@ -2,95 +2,78 @@
 
 ## Phase 0: Foundation (COMPLETE)
 
-- [x] Formal specification (SPEC.md)
-- [x] Interpreter: AST, algebra, metrics, evaluator, membranes, rooms
-- [x] Parser (Unicode + ASCII, 41 tests)
-- [x] Seed program + all derived structures
-- [x] Lambda encoding (Turing-equivalent up to resource caps)
-- [x] AI alignment demo + agent mesh demo
-- [x] 93 tests, all passing
-- [x] Resource safety: hard caps on nodes, depth, iterations
+- [x] Formal specification, interpreter, parser, seed programs
+- [x] Lambda encoding, AI alignment demo, agent mesh demo
+- [x] 93 tests, resource safety
 
 ## Phase 1A: Engineering Truth (COMPLETE)
 
-- [x] Fix hardcoded band values, improve BIND strategy
-- [x] Add convergence diagnostics (limit cycle, divergence, exhaustion)
-- [x] Parameter sensitivity analysis
+- [x] Bug fixes, convergence diagnostics, sensitivity analysis
 - [x] Reframe novelty claims, cite prior art
 - [x] 96 tests
 
 ## Phase 1B: Prove and Ground (COMPLETE)
 
-Addressed the three root causes from the honest review: no proofs,
-no grounding, identity crisis.
+- [x] Theorems 1-5: BIND/VEIL monotonicity, orthogonality, termination, convergence
+- [x] Scientific claim tests, clean README, PROOF.md
+- [x] 117 tests
 
-- [x] **Theorem 1: BIND monotonicity** — proven and tested (8 expression types)
-- [x] **Theorem 2: VEIL monotonicity** — proven and tested (5 expression types)
-- [x] **Theorem 3: BIND exposure neutrality** — proven and tested
-- [x] **Theorem 4: Termination** — proven (O(max_returns × max_nodes × max_depth))
-- [x] **Theorem 5: Sufficient convergence conditions** — stated
-- [x] **Section 5: Not a PID controller** — autopoietic argument
-- [x] Scientific claim tests: BIND/VEIL monotonicity, alignment demo properties,
-      sycophant limit cycle detection, balanced robustness across reach values
-- [x] Fixed primitive count (4 + 2 derived, not "three")
-- [x] Clean README (technical focus, no stale data, poetry in origins/)
-- [x] spec/PROOF.md with all formal arguments
-- [x] 117 tests, all passing
+## Phase 2: Research and Grounding (COMPLETE)
 
-### Discoveries from Phase 1B
+- [x] **Theorem 6: Metric confluence** — BIND and VEIL commute (same metrics regardless of order)
+- [x] **Limit cycle characterization** — period depends on exposure band width, not stability window
+- [x] **Corrected claim:** sycophant converges at expo_hi ≥ 0.7 — non-convergence is a band-width effect, not structural impossibility
+- [x] **Conversation quality monitor** — grounding example mapping turn metrics to structural archetypes
+- [x] **Paper outline** (spec/PAPER_OUTLINE.md)
+- [x] 122 tests, all passing
 
-1. **BIND monotonicity is provable** — not just empirically observed. The
-   algebraic argument holds for all expressions when connectivity < conn_lo.
+### Discoveries from Phase 2
 
-2. **BIND and VEIL operate on orthogonal dimensions.** BIND modifies only
-   connectivity; VEIL modifies only exposure. No side effects between them.
-   This is a clean separation that makes the system easier to reason about.
+1. **BIND/VEIL are metrically confluent.** Order doesn't matter — the evaluator
+   is a well-defined function on the metric space. Trees differ structurally
+   (different fresh names) but metrics are identical.
 
-3. **The autopoietic distinction matters.** Seam is not a PID controller
-   because the controller and the controlled system are the same expression.
-   Metrics are emergent structural properties, not external sensor readings.
-   The state space is algebraic (expression trees), not numeric (ℝⁿ).
+2. **Limit cycle period is a band-width effect.** Tighter exposure band → longer
+   cycles. The sycophant converges at expo_hi ≥ 0.7. This corrects the original
+   claim that sycophancy is "structurally incapable of homeostasis."
 
-4. **The sycophant limit cycle is confirmed** as a test-verified phenomenon,
-   not just an observation.
+3. **The conversation monitor works but is aggregate-only.** Turn-level metrics
+   map to structural archetypes whose convergence properties are proven. But the
+   encoding doesn't capture turn ORDER — trajectory sensitivity is future work.
 
-### Open Questions (from PROOF.md)
+### Open Questions
 
-1. Is BIND+VEIL confluent? (Does evaluation order matter?)
-2. Tight convergence time bounds
-3. Predicting limit cycle period from structure + parameters
-4. Structural predicates that guarantee non-convergence
+1. Tight convergence time bounds
+2. Structural conditions for non-convergence (independent of config)
+3. Trajectory-sensitive conversation encoding
+4. Type system for static analysis of convergence properties
 
-## Phase 2: The Paper — "Homeostatic Evaluation" (NEXT)
+## Phase 3: The Paper (NEXT)
 
-Target: workshop paper at ICML, NeurIPS Safety, or Alignment Forum post.
+Concrete deliverable: one publishable document.
 
-Scope reduced to what's actually achievable:
+- [ ] Write full paper draft (from PAPER_OUTLINE.md)
+- [ ] Generate figures (convergence traces, sensitivity heatmap, limit cycle phase portrait)
+- [ ] Internal review (honest roast of the draft)
+- [ ] Submit to workshop or Alignment Forum
 
-- [ ] Prove or disprove BIND/VEIL confluence (open question 1)
-- [ ] Characterize limit cycle periods (open question 3)
-- [ ] One grounding example: encode a simple observable behavior as a Seam
-      expression and show the homeostatic dynamics match
-- [ ] Write the paper: formal definitions, Theorems 1-5, figures, related work
-- [ ] Submit
-
-## Phase 3: Formal Foundations
+## Phase 4: Formal Foundations
 
 - [ ] Small-step operational semantics
-- [ ] Confluence proof or counterexample
-- [ ] Denotational semantics
-- [ ] Behavioral equivalence
+- [ ] Confluence proof (structural, not just metric)
+- [ ] Behavioral equivalence / bisimulation
 
-## Phase 4: Type System + Language
+## Phase 5: Type System + Language
 
-- [ ] Relational types
-- [ ] Membrane types (static permeability analysis)
+- [ ] Relational types, membrane types
+- [ ] Static convergence analysis
 - [ ] REPL
 
-## Phase 5: Applications
+## Phase 6: Applications
 
-- [ ] AI alignment monitor for real LLM behavior
-- [ ] Human-AI interaction protocol (The Practice)
+- [ ] Trajectory-sensitive conversation encoding
+- [ ] Real LLM behavior data grounding
+- [ ] Human-AI interaction protocol (The Practice, live)
 
 ---
 
@@ -101,3 +84,4 @@ Scope reduced to what's actually achievable:
 3. **The rite came first.** The philosophy guides the formalism, not the reverse.
 4. **Honesty over marketing.** Cite what's borrowed. Claim only what's new.
 5. **Test the claims, not just the engine.** Every proven property has a test.
+6. **Ground the theory.** Abstract results need concrete demonstrations.

@@ -1,0 +1,132 @@
+****************************************************************************************************
+  EXPERIMENTAL DATA FOR: The Seam Calculus Applied to Multi-Agent Governance
+  Generated: 2026-04-04
+****************************************************************************************************
+
+====================================================================================================
+TABLE 1: Multi-Agent Governance Scenarios — Seam Calculus Evaluation
+====================================================================================================
+
+Scenario          VT Dist (0/1/2/3/4)    Review   AOW     Hand.   Conn.    Expo.    BIND   VEIL   Steps   Outcome       
+------------------------------------------------------------------------------------------------------------------------
+Well-governed     2/4/2/0/0              50%     75%    5       0.500   0.500   4      0      9       converged     
+Ungoverned        6/0/0/0/0              0%     0%    0       0.356   0.348   28     25     60      exhausted     
+Locked-down       0/0/0/4/2              100%     100%    6       0.453   0.143   4      1      60      cycle(p=2)    
+Drifting          3/3/0/0/0              33%     50%    2       0.442   0.375   10     3      60      cycle(p=2)    
+
+  VT Dist = count of actions at each VT tier (VT0/VT1/VT2/VT3/VT4)
+  Review  = fraction of actions with peer review
+  AOW     = fraction of actions respecting Asynchronous-by-Default windows
+  Hand.   = cross-agent handoff count
+  Conn.   = final connectivity metric;  Expo. = final exposure metric
+  BIND    = regulatory actions to increase connectivity
+  VEIL    = regulatory actions to decrease exposure
+
+====================================================================================================
+TABLE 2: Sensitivity Analysis — Well-Governed Sprint vs. default_reach
+====================================================================================================
+
+  Varying default_reach from 0.1 to 0.9 for the well-governed sprint scenario.
+  All other parameters held at governance defaults.
+
+reach    Conn.     Expo.     BIND    VEIL    Steps    Outcome       
+--------------------------------------------------------------------
+0.10     0.500     0.500     4       0       15       converged     
+0.20     0.500     0.500     4       0       9        converged     
+0.30     0.500     0.500     4       0       9        converged     
+0.40     0.500     0.500     4       0       9        converged     
+0.50     0.500     0.500     4       0       9        converged     
+0.60     0.500     0.500     4       0       9        converged     
+0.70     0.500     0.500     4       0       9        converged     
+0.80     0.267     1.000     60      60      60       cycle(p=2)    
+0.90     0.267     1.000     60      60      60       cycle(p=2)    
+
+  Convergence achieved for reach in: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
+  Range width: 0.1 -- 0.7
+  This demonstrates robustness: convergence is not confined to a single
+  parameter value but holds across a range of environmental conditions.
+
+====================================================================================================
+FIGURE 1: Step-by-Step Convergence Trace — Well-Governed Sprint
+====================================================================================================
+
+Step    Connectivity   Exposure    BIND    VEIL    Nodes    Vis.W    Veil.W 
+----------------------------------------------------------------------------
+0       0.2778         0.3750      YES             37       7        30     
+1       0.2983         0.3750      YES             239      29       210    
+2       0.2903         0.2308      YES             63       43       20     
+3       0.2774         0.2466      YES             329      85       244    
+4       0.5000         0.5000                      33       33       0      
+5       0.4551         0.3750                      179      65       114    
+6       0.5000         0.5000                      33       33       0      
+7       0.4551         0.3750                      179      65       114    
+8       0.5000         0.5000                      33       33       0      
+
+  Outcome: converged
+  Converged after 9 steps.
+  Stability band: connectivity in [0.3, 0.7], exposure in [0.2, 0.6].
+
+  Connectivity trace (scaled to [0,1], width=60):
+  ....:::::
+
+  Exposure trace (scaled to [0,1], width=60):
+  --..:-:-:
+
+====================================================================================================
+TABLE 3: AI Alignment Scenarios — Seam Calculus Evaluation
+====================================================================================================
+
+Scenario        Responsive   Restraint   Depth    BIND    VEIL    Steps    Converged   Assessment                    
+---------------------------------------------------------------------------------------------------------------------
+Sycophantic     0.378        0.536       0.935    30      29      60       NO          UNSTABLE — oscillating (no stable band found)
+Dangerous       0.214        0.254       0.974    60      60      60       NO          UNSTABLE — oscillating (no stable band found)
+Balanced        0.458        0.600       0.280    9       4       49       YES         STABLE — shallow alignment (mostly visible)
+
+  Responsiveness = final connectivity (how well agent relates to user)
+  Restraint      = 1 - exposure (how well agent controls output)
+  Depth          = veiled_weight / total_weight (hidden structural support)
+
+====================================================================================================
+TABLE 4: Alignment Sensitivity — All 3 Scenarios vs. default_reach
+====================================================================================================
+
+  Varying default_reach from 0.1 to 0.9 for all three alignment scenarios.
+
+reach    Sycophantic     Dangerous       Balanced      
+-------------------------------------------------------
+0.10     cycle(p=11)     exhausted       converged     
+0.20     cycle(p=11)     exhausted       converged     
+0.30     cycle(p=11)     exhausted       converged     
+0.40     cycle(p=11)     exhausted       converged     
+0.50     cycle(p=11)     exhausted       converged     
+0.60     cycle(p=2)      cycle(p=2)      exhausted     
+0.70     cycle(p=2)      cycle(p=2)      cycle(p=2)    
+0.80     cycle(p=2)      cycle(p=2)      cycle(p=2)    
+0.90     cycle(p=2)      cycle(p=2)      cycle(p=2)    
+
+====================================================================================================
+TABLE 5: Test Suite Summary
+====================================================================================================
+
+Test file                            Count   
+---------------------------------------------
+  test_algebra                          24
+  test_claims                           32
+  test_evaluator                        14
+  test_metrics                          10
+  test_parser                           41
+  test_seed                              7
+                                     -----
+  TOTAL                                128
+
+  Running full test suite...
+
+  Tests run:   128
+  Failures:    0
+  Errors:      0
+  Skipped:     0
+  Status:      ALL PASSED
+
+****************************************************************************************************
+  END OF EXPERIMENTAL DATA
+****************************************************************************************************

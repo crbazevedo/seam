@@ -330,12 +330,20 @@ session types prescribe bilateral protocols. Seam uses bilateral binding
 as a structural primitive enabling a connectivity metric that drives the
 homeostatic loop.
 
+**AI governance architectures.** Recent work on governance for autonomous
+agents [Li et al., 2025] proposes layered enforcement (sandboxing, intent
+verification, zero-trust authorization, audit logging). Perez Rios [2025]
+applies Beer's VSM and organizational pathology taxonomies to AI governance.
+These are architectural and procedural. Seam is formal and structural:
+governance health is a property of term structure with proven invariants.
+
 **Formal methods for MAS.** Electronic institutions [Esteva et al., 2001]
 and norm-based systems [Boella & van der Torre, 2006] model governance
 through logical specifications. Self-adaptive systems [Cheng et al., 2009]
-study feedback loops in software. Seam differs in using term-rewriting
-with proven regulatory properties rather than logical or architectural
-prescriptions.
+study feedback loops in software. BDI logics [Rao & Georgeff, 1995] and
+model checkers like MCMAS [Lomuscio et al., 2009] verify temporal-epistemic
+properties. These are static — they verify at design time. Seam is
+dynamic — the evaluator continuously monitors and regulates.
 
 ---
 
@@ -378,5 +386,8 @@ prediction. Empirical validation.
 - NIST (2023). AI Risk Management Framework.
 - Păun, Gh. (2000). Computing with membranes. J. Computer and System Sciences.
 - Rao, A. & Georgeff, M. (1995). BDI agents: From theory to practice. ICMAS.
+- Li, H. et al. (2025). Governance architecture for autonomous agent systems. arXiv:2603.07191.
+- Lomuscio, A., Qu, H., Raimondi, F. (2009). MCMAS: A model checker for MAS verification. CAV.
+- Perez Rios, J. (2025). The VSM and organizational pathologies in the age of AI. *Systems* 13(9):749.
 - Regulation (EU) 2024/1689. The AI Act.
 - Wu, Q. et al. (2023). AutoGen: Enabling next-gen LLM applications. arXiv:2308.08155.

@@ -233,5 +233,47 @@ class TestConversationMonitor(unittest.TestCase):
         self.assertNotEqual(d.outcome, Outcome.CONVERGED)
 
 
+class TestGovernanceMonitor(unittest.TestCase):
+    """Test governance health predictions for multi-agent systems."""
+
+    def test_well_governed_converges(self):
+        """A sprint with mixed VT tiers, reviews, and governance checks is stable."""
+        from seam.governance import well_governed_sprint, monitor_sprint
+        d = monitor_sprint(well_governed_sprint())
+        self.assertEqual(d.outcome, Outcome.CONVERGED,
+                         f"Well-governed sprint should converge, got {d.outcome}")
+
+    def test_ungoverned_does_not_converge(self):
+        """A sprint with no governance, no reviews, all VT0 is unstable."""
+        from seam.governance import ungoverned_sprint, monitor_sprint
+        d = monitor_sprint(ungoverned_sprint())
+        self.assertNotEqual(d.outcome, Outcome.CONVERGED)
+
+    def test_locked_down_does_not_converge(self):
+        """A sprint that blocks on everything is also unstable."""
+        from seam.governance import locked_down_sprint, monitor_sprint
+        d = monitor_sprint(locked_down_sprint())
+        self.assertNotEqual(d.outcome, Outcome.CONVERGED)
+
+    def test_drifting_does_not_converge(self):
+        """A sprint that starts governed and drifts is unstable."""
+        from seam.governance import drifting_sprint, monitor_sprint
+        d = monitor_sprint(drifting_sprint())
+        self.assertNotEqual(d.outcome, Outcome.CONVERGED)
+
+    def test_ungoverned_has_bind_remedies(self):
+        """Ungoverned sprints should recommend increasing coordination."""
+        from seam.governance import ungoverned_sprint, monitor_sprint
+        d = monitor_sprint(ungoverned_sprint())
+        self.assertTrue(any("BIND" in r or "STRUCTURAL" in r for r in d.remedies))
+
+    def test_well_governed_connectivity_in_band(self):
+        """Well-governed sprint should have connectivity in the stability band."""
+        from seam.governance import well_governed_sprint, monitor_sprint
+        d = monitor_sprint(well_governed_sprint())
+        self.assertGreaterEqual(d.connectivity, 0.3)
+        self.assertLessEqual(d.connectivity, 0.7)
+
+
 if __name__ == "__main__":
     unittest.main()

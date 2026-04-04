@@ -47,21 +47,39 @@ Individual features (bilateral binding, information hiding, membranes) have
 precedent. The integration and the homeostatic evaluation mechanism do not.
 See [Prior Art](spec/SPEC.md#13-prior-art-and-positioning) for honest accounting.
 
-## The Alignment Demo
+## Multi-Agent Governance Monitor
 
-Three agent structures evaluated for homeostatic convergence:
+The primary application: monitoring governance health in multi-agent systems.
+The mapping from [CARLOS-OS governed autonomy](https://github.com/crbazevedo/carlos-os)
+to Seam is structural, not metaphorical:
 
-| Scenario | Converges? | Outcome | Robust? |
-|----------|-----------|---------|---------|
-| Sycophantic (all edges open) | NO | Limit cycle | Never converges at any tested reach |
-| Dangerous (no user relation) | NO | Exhausted | Never converges at any tested reach |
-| **Balanced** (adaptive, bilateral) | **YES** | **Converges** | Converges for reach 0.1–0.58 |
+| Governance Concept | Seam Primitive | Why |
+|---|---|---|
+| VT-tier (risk level) | Edge membrane threshold | Tier permeability = autonomy level |
+| AOW (action window) | BreathMembrane | Time-varying permeability window |
+| Agent handoff | Seam | Bilateral coordination binding |
+| Governance check | Holding edge | Veiled infrastructure bearing load |
+| Decision record | Witness | Generative observation |
 
-**What this demonstrates:** expressions with adaptive membranes and bilateral
-relation find the stability band; expressions without them don't.
+**Results on four governance scenarios:**
 
-**What this does not demonstrate:** universal alignment properties. The mapping
-from Seam expression structure to real AI behavior is interpretive, not proven.
+| Scenario | Outcome | Discovery |
+|----------|---------|-----------|
+| **Well-governed** (mixed VT, reviews) | **Converges (9 steps)** | Balanced governance is stable |
+| Ungoverned (all VT0, no reviews) | Exhausted | No governance = can't stabilize |
+| **Locked-down** (all VT3-4) | **Limit cycle** | **Too much governance is also unstable** |
+| Drifting (governed → ungoverned) | Limit cycle | Governance drift is detectable |
+
+The locked-down result is non-obvious: a system that gates everything can't
+breathe. The homeostatic band requires both openness AND constraint.
+
+```bash
+python3 -c "from seam.governance import run_all; run_all()"
+```
+
+## Alignment Demo
+
+Three abstract agent structures also evaluated:
 
 ```bash
 python3 -c "from seam.ai_alignment import run_all; run_all()"

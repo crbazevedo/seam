@@ -78,6 +78,9 @@
 \newlabel{prop:sycophant}{{7}{4}{Sycophant exclusion}{property.7}{}}
 \newlabel{obs:convergence}{{1}{4}{Sufficient conditions for convergence}{observation.1}{}}
 \@writefile{toc}{\contentsline {paragraph}{Robustness basin.}{4}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Governance Application}{4}{section.5}\protected@file@percent }
+\newlabel{sec:eval}{{5}{4}{Governance Application}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}System Under Study}{4}{subsection.5.1}\protected@file@percent }
 \citation{microsoft}
 \citation{leucker}
 \citation{agentguard}
@@ -87,9 +90,6 @@
 \citation{christiano2017}
 \citation{christiano2017}
 \citation{bai2022}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Governance Application}{5}{section.5}\protected@file@percent }
-\newlabel{sec:eval}{{5}{5}{Governance Application}{section.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}System Under Study}{5}{subsection.5.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Encoding Faithfulness}{5}{subsection.5.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Four Governance Scenarios}{5}{subsection.5.3}\protected@file@percent }
 \newlabel{sec:scenarios}{{5.3}{5}{Four Governance Scenarios}{subsection.5.3}{}}
@@ -106,14 +106,14 @@
 \@writefile{toc}{\contentsline {section}{\numberline {6}Discussion}{5}{section.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}What Practitioners Gain}{5}{subsection.6.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.2}The Restraint Necessity Result}{5}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Relationship to AI Alignment}{5}{subsection.6.3}\protected@file@percent }
+\newlabel{sec:alignment}{{6.3}{5}{Relationship to AI Alignment}{subsection.6.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Governance Scenarios and Evaluation Results}}{6}{table.caption.15}\protected@file@percent }
 \newlabel{tab:scenarios}{{7}{6}{Governance Scenarios and Evaluation Results}{table.caption.15}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Convergence traces for four governance scenarios. Blue: coordination. Orange: gatedness. Dashed lines mark health band boundaries (coordination $[0.3, 0.7]$, gatedness $[0.2, 0.6]$). (a)\nonbreakingspace Well-governed converges at cycle\nonbreakingspace 18. (b)\nonbreakingspace Ungoverned oscillates without settling. (c)\nonbreakingspace Over-governed: coordination in band but gatedness stuck at ${\sim }0.14$, below the health band. (d)\nonbreakingspace Drifting: period-2 oscillation crossing band boundaries.}}{6}{figure.caption.21}\protected@file@percent }
 \newlabel{fig:convergence}{{4}{6}{Convergence traces for four governance scenarios. Blue: coordination. Orange: gatedness. Dashed lines mark health band boundaries (coordination $[0.3, 0.7]$, gatedness $[0.2, 0.6]$). (a)~Well-governed converges at cycle~18. (b)~Ungoverned oscillates without settling. (c)~Over-governed: coordination in band but gatedness stuck at ${\sim }0.14$, below the health band. (d)~Drifting: period-2 oscillation crossing band boundaries}{figure.caption.21}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Veiled content ablation experiment.}}{6}{table.caption.20}\protected@file@percent }
 \newlabel{tab:veiled}{{8}{6}{Veiled content ablation experiment}{table.caption.20}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Relationship to AI Alignment}{6}{subsection.6.3}\protected@file@percent }
-\newlabel{sec:alignment}{{6.3}{6}{Relationship to AI Alignment}{subsection.6.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Baseline comparison with traffic-light coloring. The over-governed scenario (row\nonbreakingspace 3) reveals the key mismatch: the threshold classifier labels it \emph  {stable} (green) while the structural diagnostic correctly identifies a \emph  {limit cycle} (red).}}{6}{figure.caption.22}\protected@file@percent }
 \newlabel{fig:baseline}{{5}{6}{Baseline comparison with traffic-light coloring. The over-governed scenario (row~3) reveals the key mismatch: the threshold classifier labels it \emph {stable} (green) while the structural diagnostic correctly identifies a \emph {limit cycle} (red)}{figure.caption.22}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Restraint Necessity: the growth-truncation oscillation (Property\nonbreakingspace \ref {prop:restraint}). When all gates in the template pass, VEIL corrections accumulate but are destroyed by truncation when the expression exceeds the node cap. The template then re-asserts high gatedness, restarting the cycle. This oscillation prevents convergence, proving that structural restraint (at least one holding gate) is necessary.}}{7}{figure.caption.24}\protected@file@percent }
@@ -132,6 +132,7 @@
 \@writefile{toc}{\contentsline {paragraph}{Future work.}{7}{section*.30}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {A}Retraction Narrative}{7}{appendix.A}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Turing completeness.}{7}{section*.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Masking gradient.}{7}{section*.32}\protected@file@percent }
 \bibstyle{ACM-Reference-Format}
 \bibdata{references}
 \bibcite{ashby}{{1}{1956}{{Ashby}}{{}}}
@@ -164,7 +165,6 @@
 \newlabel{tocindent3}{0pt}
 \newlabel{tocindent4}{0pt}
 \newlabel{tocindent5}{0pt}
-\@writefile{toc}{\contentsline {paragraph}{Masking gradient.}{8}{section*.32}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Lambda/TC equivalence.}{8}{section*.33}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{BreathMembrane necessity.}{8}{section*.34}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{References}{8}{section*.36}\protected@file@percent }

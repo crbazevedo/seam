@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Homebrew) (preloaded format=pdflatex 2026.3.4)  5 APR 2026 01:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Homebrew) (preloaded format=pdflatex 2026.3.4)  5 APR 2026 01:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1831,12 +1831,7 @@ LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/sc' will be
 Class acmart Warning: A possible image without description on input line 548.
 
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 6.0pt on input line 579.
-
-Overfull \hbox (56.36182pt too wide) in paragraph at lines 591--595
- [][] 
- []
-
+(Font)              scaled to size 5.0pt on input line 579.
 
 Class acmart Warning: A possible image without description on input line 597.
 
@@ -1894,11 +1889,8 @@ Package fancyhdr Warning: \headheight is too small (13.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-3.3575pt}.
 
-[5.5]
-Underfull \vbox (badness 2213) has occurred while \output is active []
-
- [6.6{/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/enc/dvips/li
-bertine/lbtn_ki75ao.enc}]
+[5.5] [6.6{/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/enc/dvi
+ps/libertine/lbtn_ki75ao.enc}]
 Overfull \hbox (38.60426pt too wide) in paragraph at lines 1328--1333
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) Turing-complete via lambda en-cod-ing. The 
 bounded it-er-a-tion ($[]$),
@@ -1931,10 +1923,6 @@ rtant steps when creating your papers will ensure that the widest possible audi
 ence can ingest your work..
 
 
-Package balance Warning: You have called \balance in second column
-(balance)                Columns might not be balanced.
-
-
 (/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/generic/stringenc/s
 e-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
@@ -1953,7 +1941,7 @@ Package rerunfilecheck Info: File `paper.out' has not changed.
 Here is how much of TeX's memory you used:
  44882 strings out of 467525
  1006276 string characters out of 5408440
- 1592515 words of memory out of 5000000
+ 1592772 words of memory out of 5000000
  72061 multiletter control sequences out of 15000+600000
  891076 words of font info for 589 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
@@ -1973,14 +1961,16 @@ xmf-dist/fonts/type1/public/libertine/LinLibertineTBI.pfb></opt/homebrew/Cellar
 /texlive/20260301/share/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.
 pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/
 newtx/NewTXMI.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts
-/type1/public/newtx/NewTXMI7.pfb></opt/homebrew/Cellar/texlive/20260301/share/t
-exmf-dist/fonts/type1/public/newtx/txmiaX.pfb></opt/homebrew/Cellar/texlive/202
-60301/share/texmf-dist/fonts/type1/public/newtx/txsym.pfb></opt/homebrew/Cellar
-/texlive/20260301/share/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on paper.pdf (8 pages, 559908 bytes).
+/type1/public/newtx/NewTXMI5.pfb></opt/homebrew/Cellar/texlive/20260301/share/t
+exmf-dist/fonts/type1/public/newtx/NewTXMI7.pfb></opt/homebrew/Cellar/texlive/2
+0260301/share/texmf-dist/fonts/type1/public/newtx/txmiaX.pfb></opt/homebrew/Cel
+lar/texlive/20260301/share/texmf-dist/fonts/type1/public/newtx/txsym.pfb></opt/
+homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/newtx/txsy
+s.pfb>
+Output written on paper.pdf (8 pages, 563073 bytes).
 PDF statistics:
- 460 PDF objects out of 1000 (max. 8388607)
- 404 compressed objects within 5 object streams
+ 465 PDF objects out of 1000 (max. 8388607)
+ 407 compressed objects within 5 object streams
  126 named destinations out of 1000 (max. 500000)
  133441 words of extra memory for PDF output out of 154059 (max. 10000000)
 

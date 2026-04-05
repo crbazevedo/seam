@@ -107,59 +107,71 @@ We present a formal model where:
 ### 2.1 Governance in Multi-Agent AI Systems
 
 The shift from single-agent to multi-agent AI systems has created a
-governance gap. Bose [5] surveys governance frameworks for LLM agent
-collectives, identifying three failure modes: operational miscoordination,
-strategic misalignment, and adversarial collusion. The survey finds that
-industry favors deterministic but brittle models (hierarchical, prescriptive)
-while academia explores adaptive but chaotic ones (democratic, economic,
-emergent).
+governance gap. Bose [5] presents the first systematic survey of
+governance frameworks for LLM agent collectives, identifying three
+failure modes — operational miscoordination, strategic misalignment,
+adversarial collusion — and taxonomizing five governance models
+(hierarchical, prescriptive, democratic, economic, emergent). The
+survey finds industry favors deterministic but brittle models while
+academia explores adaptive but chaotic ones.
 
 Microsoft's Agent Governance Toolkit [3], released April 2026, provides
-runtime policy enforcement for autonomous agents: zero-trust identity,
-execution sandboxing, compliance grading, and circuit breakers. It
-addresses *enforcement* (is this action permitted?) but not *health
-monitoring* (is the governance configuration itself working?). Our approach
-is complementary: structural health monitoring sits alongside policy
-enforcement, answering a different question.
+runtime policy enforcement: zero-trust identity, execution sandboxing,
+compliance grading, and circuit breakers, covering all 10 OWASP agentic
+AI risks with sub-millisecond enforcement. It addresses *per-action
+enforcement* but not *configuration-level health*. Our approach is
+complementary: structural health monitoring answers "is the governance
+working?" alongside policy engines that answer "is this action
+permitted?"
 
 Li et al. [6] propose a layered governance architecture (sandboxing,
-intent verification, zero-trust authorization, audit logging). This is
-a defense-in-depth approach to enforcement. It does not model the
-*dynamics* of governance over time.
+intent verification, zero-trust authorization, audit logging). Xiang
+et al. [17] introduce AgentGuard for runtime verification with
+probabilistic model checking. These provide external verification and
+enforcement. Our model makes governance health an intrinsic structural
+property.
 
-### 2.2 Adjustable Autonomy
+### 2.2 Adjustable Autonomy and Trust
 
 The question "how much autonomy should each agent have?" has been studied
-extensively in human-robot interaction. Parasuraman et al. [7] define
-10 Levels of Automation from "human does everything" to "computer does
-everything." Dorsa Sadigh's shared autonomy framework [8] formulates the
-problem as a POMDP with uncertainty over user intent. SARI [9] extends
-shared autonomy across repeated interactions, learning when to intervene.
+extensively. Parasuraman et al. [7] define 10 Levels of Automation.
+Kaber [18] reviews how LoA taxonomies have been used and critiques their
+limitations for increasingly autonomous systems. SARI [9] formulates
+shared autonomy as a POMDP, learning assistance across repeated
+interactions.
 
-These approaches model the autonomy *level* for a single agent-human pair.
-We extend this to multi-agent systems where governance applies to a *team*
-of agents, and the health question is about the *configuration* (the
-distribution of autonomy levels across agents), not a single level.
+On the trust side, Lee and See [19] define trust as attitude under
+uncertainty, distinguishing analytic, analogical, and affective processes.
+Hoff and Bashir [20] integrate empirical evidence into a three-layered
+model (dispositional, situational, learned). Kim et al. [21] find that
+user involvement in LLM planning *fails* to calibrate trust — plausible
+plans mislead users — arguing that governance must be structural, not
+reliant on user judgment of agent plans.
+
+These approaches model autonomy and trust for *single* agent-human pairs.
+We extend to multi-agent systems where the health question is about the
+*configuration* — the distribution of autonomy levels and coordination
+patterns across a team.
 
 ### 2.3 Self-Adaptive Systems
 
 The MAPE-K reference architecture [10] (Monitor-Analyze-Plan-Execute over
 Knowledge) is the standard model for self-adaptive software. Our evaluator
 follows the MAPE-K pattern: Monitor (compute metrics), Analyze (detect
-deviations from health band), Plan (select BIND or VEIL remedy), Execute
+deviations from health band), Plan (select regulatory action), Execute
 (prescribe intervention), Knowledge (expression tree).
 
 The key difference: MAPE-K loops operate on *numerical* state variables.
 Our monitor operates on *structural* state — an expression tree whose
-topology encodes the governance configuration. This enables metrics
-(coordination health, gatedness) that emerge from the structure itself,
-not from externally defined sensor readings.
+topology encodes the governance configuration. Metrics emerge from the
+structure itself, not from externally defined sensor readings.
 
 Weyns [11] provides a comprehensive introduction to self-adaptive systems
-engineering. The AWARE architecture [12] (2025) proposes extending MAPE-K
-with awareness and reasoning capabilities. Our contribution fits within
-this broader adaptive systems research, providing a formal structural
-substrate for the Monitor and Analyze components.
+engineering. Sanwouo et al. [12] propose AWARE as a successor to MAPE-K,
+distributing the feedback loop and making it goal-driven. Li et al. [22]
+map how generative AI can enhance each MAPE-K phase. Our contribution
+provides a formal structural substrate for the Monitor and Analyze
+components — one where governance health has algebraic properties.
 
 ### 2.4 Organizational Cybernetics
 
@@ -551,6 +563,24 @@ between structural diagnosis and human-perceived governance quality.
 
 [16] Leucker, M., Schallhart, C. A brief account of runtime verification.
      Journal of Logic and Algebraic Programming, 78(5):293–303, 2009.
+
+[17] Xiang, R. et al. AgentGuard: Runtime Verification of AI Agents.
+     arXiv:2509.23864, 2025.
+
+[18] Kaber, D. Systematic Literature Review of Levels of Automation
+     Taxonomy. Int. J. Human-Computer Interaction, 2025.
+
+[19] Lee, J.D., See, K.A. Trust in Automation: Designing for Appropriate
+     Reliance. Human Factors, 46(1):50–80, 2004.
+
+[20] Hoff, K.A., Bashir, M. Trust in Automation: Integrating Empirical
+     Evidence. Human Factors, 57(3):407–434, 2015.
+
+[21] Kim, S. et al. Plan-Then-Execute: User Trust and Team Performance
+     with LLM Agents. CHI 2025.
+
+[22] Li, Y. et al. Generative AI for Self-Adaptive Systems: State of the
+     Art and Research Roadmap. ACM Trans. TAAS, 2024.
 
 ---
 

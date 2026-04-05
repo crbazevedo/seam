@@ -1,0 +1,82 @@
+This is BibTeX, Version 0.99e (TeX Live 2026/Homebrew)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: paper.aux
+The style file: ACM-Reference-Format.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: references.bib
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--empty address in ashby
+Warning--no number and no volume in bai2022
+Warning--page numbers missing in both pages and numpages fields in bai2022
+Warning--empty address in beer
+Warning--no number and no volume in bose
+Warning--page numbers missing in both pages and numpages fields in bose
+Warning--empty address in cardelli2005
+Warning--empty publisher in christiano2017
+Warning--empty address in christiano2017
+Warning--page numbers missing in both pages and numpages fields in christiano2017
+Warning--no number and no volume in aware
+Warning--page numbers missing in both pages and numpages fields in aware
+Warning--no number and no volume in kaber
+Warning--page numbers missing in both pages and numpages fields in kaber
+Warning--empty publisher in kim
+Warning--empty address in kim
+Warning--page numbers missing in both pages and numpages fields in kim
+Warning--no number and no volume in liarch
+Warning--page numbers missing in both pages and numpages fields in liarch
+Warning--no number and no volume in ligen
+Warning--page numbers missing in both pages and numpages fields in ligen
+Warning--empty address in weyns
+Warning--no number and no volume in agentguard
+Warning--page numbers missing in both pages and numpages fields in agentguard
+Warning--no number and no volume in sari
+Warning--page numbers missing in both pages and numpages fields in sari
+You've used 23 entries,
+            6273 wiz_defined-function locations,
+            1637 strings with 21255 characters,
+and the built_in function-call counts, 23686 in all, are:
+= -- 3443
+> -- 675
+< -- 0
++ -- 232
+- -- 277
+* -- 1469
+:= -- 2274
+add.period$ -- 118
+call.type$ -- 23
+change.case$ -- 137
+chr.to.int$ -- 23
+cite$ -- 49
+duplicate$ -- 2046
+empty$ -- 1462
+format.name$ -- 309
+if$ -- 6037
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 81
+newline$ -- 221
+num.names$ -- 161
+pop$ -- 825
+preamble$ -- 1
+purify$ -- 320
+quote$ -- 0
+skip$ -- 692
+stack$ -- 0
+substring$ -- 1567
+swap$ -- 160
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 421
+warning$ -- 26
+while$ -- 171
+width$ -- 0
+write$ -- 463
+(There were 26 warnings)

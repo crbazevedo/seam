@@ -48,7 +48,8 @@ A Homeostatic Approach}
 \author{Carlos R. B. Azevedo}
 \affiliation{%
   \institution{Independent Researcher}
-  \country{United Kingdom}
+  \city{S\~{a}o Paulo}
+  \country{Brazil}
 }
 \email{carlos@crbazevedo.com}
 
@@ -268,7 +269,7 @@ paper and the formal symbols used in definitions and proofs.
     Metric 2           & Gatedness         & $\mathrm{gated}(e) = P / E$ if $E > 0$; else $1.0$ \\
     Regulator 1        & BIND              & inserts binding node \\
     Regulator 2        & VEIL              & tightens gate to holding \\
-    Target range       & Health band       & $[\mathrm{coord}_{\mathrm{lo}}, \mathrm{coord}_{\mathrm{hi}}] \times [\mathrm{gated}_{\mathrm{lo}}, \mathrm{gated}_{\mathrm{hi}}]$ \\
+    Target range       & Health band       & $[\text{c}_{\text{lo}}, \text{c}_{\text{hi}}] \times [\text{g}_{\text{lo}}, \text{g}_{\text{hi}}]$ \\
     Single classifier  & Pass-hold ratio   & $\rho = P / (E + 1)$ \\
     \bottomrule
   \end{tabular}
@@ -558,39 +559,39 @@ prevents destructive interference between regulators.
 \begin{figure}[t]
   \centering
   \begin{tikzpicture}[
-    node distance=0.7cm and 0.3cm,
-    process/.style={draw, rounded corners=4pt, fill=flowgray, minimum width=2.2cm,
-                 minimum height=0.65cm, align=center, font=\scriptsize},
-    decision/.style={draw, diamond, fill=bandamber!50, minimum width=1.6cm,
-                     minimum height=0.8cm, align=center, font=\scriptsize,
-                     inner sep=1pt, aspect=1.8},
-    action/.style={draw, rounded corners=4pt, fill=coordblue!20, minimum width=1.8cm,
-                   minimum height=0.55cm, align=center, font=\scriptsize},
-    result/.style={draw, rounded corners=4pt, fill=bandgreen!70, minimum width=1.8cm,
-                   minimum height=0.55cm, align=center, font=\scriptsize},
+    node distance=0.8cm and 0.5cm,
+    process/.style={draw, rounded corners=4pt, fill=flowgray, minimum width=2cm,
+                 minimum height=0.6cm, align=center, font=\scriptsize},
+    decision/.style={draw, diamond, fill=bandamber!50, minimum width=1.4cm,
+                     minimum height=0.7cm, align=center, font=\scriptsize,
+                     inner sep=1pt, aspect=2},
+    action/.style={draw, rounded corners=4pt, fill=coordblue!20, minimum width=1.6cm,
+                   minimum height=0.5cm, align=center, font=\scriptsize},
+    result/.style={draw, rounded corners=4pt, fill=bandgreen!70, minimum width=1.6cm,
+                   minimum height=0.5cm, align=center, font=\scriptsize},
     arr/.style={-{Stealth[length=4pt]}, thick},
   ]
     \node[process] (measure) {Measure\\metrics};
     \node[decision, below=of measure] (checkcoord) {Coord $< 0.3$?};
-    \node[action, right=1.2cm of checkcoord] (bind) {BIND};
-    \node[process, below=0.5cm of bind] (remeasure) {\footnotesize Remeasure};
-    \node[decision, below=of checkcoord] (checkgate) {Gated $> 0.6$?};
-    \node[action, right=1.2cm of checkgate] (veil) {VEIL};
+    \node[action, right=1.4cm of checkcoord] (bind) {BIND};
+    \node[process, below=0.4cm of bind] (remeasure) {\scriptsize Remeasure};
+    \node[decision, below=1cm of checkcoord] (checkgate) {Gated $> 0.6$?};
+    \node[action, right=1.4cm of checkgate] (veil) {VEIL};
     \node[decision, below=of checkgate] (stable) {Stable?};
-    \node[result, below left=0.6cm and 0cm of stable] (converge) {CONVERGE};
-    \node[process, below right=0.6cm and 0cm of stable] (cont) {Continue\\cycle};
+    \node[result, below left=0.5cm and 0cm of stable] (converge) {CONVERGE};
+    \node[process, below right=0.5cm and 0cm of stable] (cont) {Continue\\cycle};
 
     \draw[arr] (measure) -- (checkcoord);
     \draw[arr] (checkcoord) -- node[font=\tiny, left, pos=0.4] {no} (checkgate);
     \draw[arr] (checkcoord) -- node[font=\tiny, above] {yes} (bind);
     \draw[arr] (bind) -- (remeasure);
-    \draw[arr] (remeasure) |- ([yshift=0.15cm]checkgate.north east) -- (checkgate.north east);
+    \draw[arr] (remeasure.south) -- ++(0,-0.15) -| ([xshift=0.3cm]checkgate.north) -- (checkgate.north east);
     \draw[arr] (checkgate) -- node[font=\tiny, left, pos=0.4] {no} (stable);
     \draw[arr] (checkgate) -- node[font=\tiny, above] {yes} (veil);
-    \draw[arr] (veil) |- ([yshift=0.15cm]stable.north east) -- (stable.north east);
+    \draw[arr] (veil.south) -- ++(0,-0.15) -| ([xshift=0.3cm]stable.north) -- (stable.north east);
     \draw[arr] (stable) -- node[font=\tiny, left] {yes} (converge);
     \draw[arr] (stable) -- node[font=\tiny, right] {no} (cont);
-    \draw[arr] (cont.east) -- ++(0.6,0) |- (measure.east);
+    \draw[arr] (cont.east) -- ++(0.5,0) |- (measure.east);
   \end{tikzpicture}
   \caption{The regulatory cycle with sequential BIND-remeasure-VEIL
     protocol. The evaluator measures coordination and gatedness, fires
@@ -674,16 +675,15 @@ $\mathrm{gated}' \leq \mathrm{gated}$.
 \end{proof}
 
 \begin{property}[Non-interference / orthogonality]\label{prop:ortho}
-\textsc{bind} adds only bindings and variables. It does not add, remove,
-or modify any gate. Therefore
-$\mathrm{gated}(\textsc{bind}(e)) = \mathrm{gated}(e)$. The regulatory
-actions operate on orthogonal dimensions.
+\textsc{bind} adds only bindings and variables; it does not add, remove,
+or modify any gate. Therefore $\mathrm{gated}(\textsc{bind}(e)) =
+\mathrm{gated}(e)$. The regulators operate on orthogonal dimensions.
 \end{property}
 
 \begin{property}[Termination]\label{prop:term}
-The evaluator executes at most
-$\mathrm{max\_iterations} \times O(\mathrm{max\_nodes} \times \mathrm{max\_depth})$
-cycles. Total work is bounded.
+The evaluator executes at most $R$ iterations, each bounded by
+$O(M \times D)$ where $R =$ max iterations, $M =$ max nodes,
+$D =$ max depth. Total work is bounded.
 \end{property}
 
 \begin{property}[Metric confluence / order independence]\label{prop:confluence}

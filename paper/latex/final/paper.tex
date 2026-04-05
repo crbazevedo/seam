@@ -63,12 +63,12 @@ We present a formal model for \textbf{governance health monitoring} ---
 a structural diagnostic that auto-encodes governance events into an
 expression tree, computes two health metrics (coordination and
 gatedness), and classifies the configuration as stable, oscillating, or
-drifting. We prove six formal properties: the regulatory actions always
+drifting. We prove seven formal properties: the regulatory actions always
 improve their target metric, they are orthogonal (do not interfere),
 the evaluation always terminates, and structural restraint --- the
 presence of holding gates --- is necessary for convergence. We state
 sufficient convergence conditions under which stability is guaranteed
-within 67 steps.
+within a bounded number of steps.
 
 We evaluate on four governance scenarios from a real multi-agent system.
 The well-governed configuration converges. The ungoverned configuration
@@ -158,7 +158,7 @@ We present a formal model where:
     a health band and prescribes specific interventions: ``add
     coordination'' or ``tighten gates.'' (Section~\ref{sec:model})
 
-  \item We prove \textbf{six formal properties} guaranteeing predictable
+  \item We prove \textbf{seven formal properties} guaranteeing predictable
     evaluator behavior, including that structural restraint is necessary
     for convergence (Section~\ref{sec:formal}).
 
@@ -216,7 +216,8 @@ generative AI can enhance each MAPE-K phase. Our contribution provides
 a formal structural substrate for the Monitor and Analyze
 components --- one where governance health has algebraic properties.
 
-Process calculi provide formal precursors: the Chemical Abstract
+At the formal foundations level, process calculi provide relevant
+precursors: the Chemical Abstract
 Machine~\cite{berry1992} models computation as a chemical solution
 seeking equilibrium; P-systems~\cite{paun1998} and Brane
 calculi~\cite{cardelli2005} model membranes but lack continuously
@@ -264,7 +265,7 @@ paper and the formal symbols used in definitions and proofs.
     Governance boundary& Gate              & $a\;|\theta|\;b$ \\
     Iterative cycle    & Return            & $\mu\, x.\, B$ \\
     Metric 1           & Coordination      & $\mathrm{coord}(e) = S / \max(N{-}1, 1)$ \\
-    Metric 2           & Gatedness         & $\mathrm{gated}(e) = P / E$ \\
+    Metric 2           & Gatedness         & $\mathrm{gated}(e) = P / E$ if $E > 0$; else $1.0$ \\
     Regulator 1        & BIND              & inserts binding node \\
     Regulator 2        & VEIL              & tightens gate to holding \\
     Target range       & Health band       & $[\mathrm{coord}_{\mathrm{lo}}, \mathrm{coord}_{\mathrm{hi}}] \times [\mathrm{gated}_{\mathrm{lo}}, \mathrm{gated}_{\mathrm{hi}}]$ \\
@@ -607,14 +608,14 @@ The evaluator classifies outcomes into four categories
 \begin{table}[t]
   \caption{Governance Outcome Classification}\label{tab:outcomes}
   \small
-  \begin{tabular}{@{}ll@{}}
+  \begin{tabular}{@{}lll@{}}
     \toprule
-    \textbf{Outcome} & \textbf{Definition} \\
+    \textbf{Outcome} & \textbf{Definition} & \textbf{Meaning} \\
     \midrule
-    Stable & Both metrics in-band for $W = 5$ consecutive cycles \\
-    Limit cycle & Metrics oscillate periodically \\
-    Diverging & Structure grows without stabilizing \\
-    Exhausted & Neither converges nor cycles within step limit \\
+    Stable & Both metrics in-band for $W{=}5$ cycles & Governance is healthy \\
+    Limit cycle & Metrics oscillate periodically & Governance is unstable \\
+    Diverging & Structure grows without stabilizing & Governance is breaking down \\
+    Exhausted & Neither converges nor cycles & Governance is stuck \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -625,7 +626,7 @@ The evaluator classifies outcomes into four categories
 %% ============================================================
 \section{Formal Properties}\label{sec:formal}
 
-We state six properties with proof sketches. Table~\ref{tab:properties}
+We state seven properties with proof sketches. Table~\ref{tab:properties}
 summarizes them.
 
 \begin{table}[t]
@@ -649,8 +650,8 @@ summarizes them.
 \end{table}
 
 \begin{property}[\textsc{bind} improves coordination]\label{prop:bind}
-When $\mathrm{coord}(e) < 0.3$ and \textsc{bind} fires, the resulting
-coordination is strictly higher.
+When $\mathrm{coord}(e) < \mathrm{coord}_{\mathrm{lo}}$ (default $0.3$) and \textsc{bind} fires, the resulting
+coordination is strictly higher (for $\mathrm{coord}_{\mathrm{lo}} \leq 1/3$).
 \end{property}
 \begin{proof}
 \textsc{bind} adds one binding node (increasing the numerator by 1) and
@@ -714,11 +715,12 @@ Empirically verified: 0/39 reach values converge for all-passing
 configurations.
 \end{proof}
 
-\paragraph{Corollary 7 (Sycophant exclusion).}
+\begin{property}[Sycophant exclusion]\label{prop:sycophant}
 A governance structure where all gates have threshold below reach
-($\theta < r$ for all gates) does not converge. \textsc{bind} and
-\textsc{veil} fire every cycle; both regulators are constantly active
-but neither can achieve sustained stability.
+($\theta < r$ for all gates) does not converge at any $r > \max(\{\theta_j\})$.
+By Property~\ref{prop:restraint}, the growth-truncation oscillation
+prevents stability.
+\end{property}
 
 \begin{observation}[Sufficient conditions for convergence]\label{obs:convergence}
 Based on empirical analysis across 864 configurations, the governance
@@ -795,7 +797,7 @@ Table~\ref{tab:scenarios} presents the configurations and outcomes.
     \textbf{Scenario} & \textbf{VT Distribution} & \textbf{Review Rate} & \textbf{Checks} & \textbf{Handoffs} & \textbf{Outcome} \\
     \midrule
     \rowcolor{cellgreen}
-    Well-governed & VT0:2, VT1:4, VT2:2 & 50\% & 4 & 5 & \textbf{Stable (9 cycles)} \\
+    Well-governed & VT0:2, VT1:4, VT2:2 & 50\% & 4 & 5 & \textbf{Stable (18 cycles)} \\
     Ungoverned & VT0:6 & 0\% & 0 & 0 & Exhausted \\
     \rowcolor{cellamber}
     Over-governed & VT3:4, VT4:2 & 100\% & 6 & 6 & \textbf{Limit cycle} \\
@@ -1305,8 +1307,8 @@ Over-governance is provably as unstable as under-governance.
 Threshold-based classifiers miss both failure modes. A structural
 diagnostic catches them.
 
-The model, interpreter, 141 tests, formal semantics, and live
-demonstration are available at
+The model, interpreter (128 tests), and live demonstration are
+available at
 \url{https://github.com/crbazevedo/seam}.
 
 \paragraph{Future work.}

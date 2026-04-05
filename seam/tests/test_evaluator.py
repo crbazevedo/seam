@@ -133,8 +133,8 @@ class TestConvergenceDiagnostics(unittest.TestCase):
             stability_window=3,
         )
         ev = Evaluator(config)
-        # Simple expression that converges quickly
-        expr = Return("x", Seam(Var("x"), Var("a")))
+        # Expression with edges (needed for gatedness — exposure=1.0 without edges)
+        expr = Return("x", Edge(Seam(Var("x"), Var("a")), Var("b"), BreathMembrane(base=0.5, amplitude=0.1)))
         ev.evaluate(expr)
         self.assertEqual(ev.outcome, Outcome.CONVERGED)
 

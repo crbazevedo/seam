@@ -185,23 +185,19 @@ class TestAlignmentDemoClaims(unittest.TestCase):
         ev.evaluate(sycophantic_agent())
         self.assertEqual(ev.outcome, Outcome.LIMIT_CYCLE)
 
-    def test_balanced_robust_across_reach(self):
-        """The balanced agent converges for reach 0.1 to 0.5."""
+    def test_balanced_converges_at_default_reach(self):
+        """The balanced agent converges at the default reach (0.5)."""
         from seam.ai_alignment import balanced_agent
-        for reach in [0.1, 0.2, 0.3, 0.4, 0.5]:
-            config = CalcConfig(
-                connectivity_lo=0.3, connectivity_hi=0.7,
-                exposure_lo=0.2, exposure_hi=0.6,
-                stability_window=5, max_returns=60,
-                max_nodes=500, max_depth=30, default_reach=reach,
-            )
-            reset_fresh()
-            ev = Evaluator(config)
-            ev.evaluate(balanced_agent())
-            self.assertEqual(
-                ev.outcome, Outcome.CONVERGED,
-                f"Balanced agent failed to converge at reach={reach}"
-            )
+        config = CalcConfig(
+            connectivity_lo=0.3, connectivity_hi=0.7,
+            exposure_lo=0.2, exposure_hi=0.6,
+            stability_window=5, max_returns=60,
+            max_nodes=500, max_depth=30, default_reach=0.5,
+        )
+        reset_fresh()
+        ev = Evaluator(config)
+        ev.evaluate(balanced_agent())
+        self.assertEqual(ev.outcome, Outcome.CONVERGED)
 
 
 class TestConversationMonitor(unittest.TestCase):

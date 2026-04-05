@@ -1,0 +1,326 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{26}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{} and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showURL}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showURL #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Ashby(1956)]%
+        {ashby}
+\bibfield{author}{\bibinfo{person}{W.~Ross Ashby}.}
+  \bibinfo{year}{1956}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{An Introduction to Cybernetics}}.
+\newblock \bibinfo{publisher}{Chapman \& Hall}.
+\newblock
+
+
+\bibitem[Bai et~al\mbox{.}(2022)]%
+        {bai2022}
+\bibfield{author}{\bibinfo{person}{Yuntao Bai}, \bibinfo{person}{Saurav
+  Kadavath}, \bibinfo{person}{Sandipan Kundu}, \bibinfo{person}{Amanda Askell},
+  \bibinfo{person}{Jackson Kernion}, \bibinfo{person}{Andy Jones},
+  \bibinfo{person}{Anna Chen}, \bibinfo{person}{Anna Goldie},
+  \bibinfo{person}{Azalia Mirhoseini}, \bibinfo{person}{Cameron McKinnon},
+  {et~al\mbox{.}}} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Constitutional {AI}: Harmlessness from {AI}
+  Feedback}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2212.08073}}
+  (\bibinfo{year}{2022}).
+\newblock
+
+
+\bibitem[Beer(1981)]%
+        {beer}
+\bibfield{author}{\bibinfo{person}{Stafford Beer}.}
+  \bibinfo{year}{1981}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Brain of the Firm} (\bibinfo{edition}{2nd}
+  ed.)}.
+\newblock \bibinfo{publisher}{Wiley}.
+\newblock
+
+
+\bibitem[Berry and Boudol(1992)]%
+        {berry1992}
+\bibfield{author}{\bibinfo{person}{G{\'e}rard Berry} {and}
+  \bibinfo{person}{G{\'e}rard Boudol}.} \bibinfo{year}{1992}\natexlab{}.
+\newblock \showarticletitle{The Chemical Abstract Machine}.
+\newblock \bibinfo{journal}{\emph{Theoretical Computer Science}}
+  \bibinfo{volume}{96}, \bibinfo{number}{1} (\bibinfo{year}{1992}),
+  \bibinfo{pages}{217--248}.
+\newblock
+
+
+\bibitem[Bose(2025)]%
+        {bose}
+\bibfield{author}{\bibinfo{person}{Prithviraj Bose}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{From Anarchy to Assembly: A Survey of Governance
+  Frameworks for Collaborative {LLM} Agent Systems}.
+\newblock \bibinfo{journal}{\emph{International Journal of Engineering Research
+  and Emerging Technology (IJERET)}} (\bibinfo{year}{2025}).
+\newblock
+
+
+\bibitem[Cardelli(2005)]%
+        {cardelli2005}
+\bibfield{author}{\bibinfo{person}{Luca Cardelli}.}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Brane Calculi}.
+\newblock In \bibinfo{booktitle}{\emph{Computational Methods in Systems Biology
+  (CMSB 2004)}}. \bibinfo{series}{LNCS}, Vol.~\bibinfo{volume}{3082}.
+  \bibinfo{publisher}{Springer}.
+\newblock
+
+
+\bibitem[Christiano et~al\mbox{.}(2017)]%
+        {christiano2017}
+\bibfield{author}{\bibinfo{person}{Paul~F. Christiano}, \bibinfo{person}{Jan
+  Leike}, \bibinfo{person}{Tom Brown}, \bibinfo{person}{Miljan Martic},
+  \bibinfo{person}{Shane Legg}, {and} \bibinfo{person}{Dario Amodei}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Deep Reinforcement Learning from Human
+  Preferences}. In \bibinfo{booktitle}{\emph{Advances in Neural Information
+  Processing Systems (NeurIPS)}}.
+\newblock
+
+
+\bibitem[{European Parliament}(2024)]%
+        {euaiact}
+\bibfield{author}{\bibinfo{person}{{European Parliament}}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Regulation ({EU}) 2024/1689 --- {The Artificial
+  Intelligence Act}}.
+\newblock \bibinfo{howpublished}{Official Journal of the European Union}.
+\newblock
+
+
+\bibitem[Feitosa et~al\mbox{.}(2025)]%
+        {aware}
+\bibfield{author}{\bibinfo{person}{Daniel Feitosa} {et~al\mbox{.}}}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Breaking the Loop: {AWARE} is the new {MAPE-K}}.
+\newblock \bibinfo{journal}{\emph{HAL preprint}} (\bibinfo{year}{2025}).
+\newblock
+
+
+\bibitem[Hoff and Bashir(2015)]%
+        {hoffbashir}
+\bibfield{author}{\bibinfo{person}{Kevin~Anthony Hoff} {and}
+  \bibinfo{person}{Masooda Bashir}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Trust in Automation: Integrating Empirical Evidence
+  on Factors That Influence Trust}.
+\newblock \bibinfo{journal}{\emph{Human Factors}} \bibinfo{volume}{57},
+  \bibinfo{number}{3} (\bibinfo{year}{2015}), \bibinfo{pages}{407--434}.
+\newblock
+
+
+\bibitem[Kaber(2025)]%
+        {kaber}
+\bibfield{author}{\bibinfo{person}{David Kaber}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Systematic Literature Review of Levels of
+  Automation Taxonomy}.
+\newblock \bibinfo{journal}{\emph{International Journal of Human-Computer
+  Interaction}} (\bibinfo{year}{2025}).
+\newblock
+
+
+\bibitem[Kephart and Chess(2003)]%
+        {mapek}
+\bibfield{author}{\bibinfo{person}{Jeffrey~O. Kephart} {and}
+  \bibinfo{person}{David~M. Chess}.} \bibinfo{year}{2003}\natexlab{}.
+\newblock \showarticletitle{The Vision of Autonomic Computing}.
+\newblock \bibinfo{journal}{\emph{IEEE Computer}} \bibinfo{volume}{36},
+  \bibinfo{number}{1} (\bibinfo{year}{2003}), \bibinfo{pages}{41--50}.
+\newblock
+
+
+\bibitem[Kim et~al\mbox{.}(2025)]%
+        {kim}
+\bibfield{author}{\bibinfo{person}{Seonghee Kim} {et~al\mbox{.}}}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Plan-Then-Execute: User Trust and Team Performance
+  with {LLM} Agents}. In \bibinfo{booktitle}{\emph{Proceedings of the 2025 CHI
+  Conference on Human Factors in Computing Systems (CHI '25)}}.
+\newblock
+
+
+\bibitem[Lee and See(2004)]%
+        {leesee}
+\bibfield{author}{\bibinfo{person}{John~D. Lee} {and}
+  \bibinfo{person}{Katrina~A. See}.} \bibinfo{year}{2004}\natexlab{}.
+\newblock \showarticletitle{Trust in Automation: Designing for Appropriate
+  Reliance}.
+\newblock \bibinfo{journal}{\emph{Human Factors}} \bibinfo{volume}{46},
+  \bibinfo{number}{1} (\bibinfo{year}{2004}), \bibinfo{pages}{50--80}.
+\newblock
+
+
+\bibitem[Leucker and Schallhart(2009)]%
+        {leucker}
+\bibfield{author}{\bibinfo{person}{Martin Leucker} {and}
+  \bibinfo{person}{Christian Schallhart}.} \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{A Brief Account of Runtime Verification}.
+\newblock \bibinfo{journal}{\emph{Journal of Logic and Algebraic Programming}}
+  \bibinfo{volume}{78}, \bibinfo{number}{5} (\bibinfo{year}{2009}),
+  \bibinfo{pages}{293--303}.
+\newblock
+
+
+\bibitem[Li et~al\mbox{.}(2025)]%
+        {liarch}
+\bibfield{author}{\bibinfo{person}{Hao Li} {et~al\mbox{.}}}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Governance Architecture for Autonomous Agent
+  Systems: Threats, Framework, and Engineering Practice}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2603.07191}}
+  (\bibinfo{year}{2025}).
+\newblock
+
+
+\bibitem[Li et~al\mbox{.}(2024)]%
+        {ligen}
+\bibfield{author}{\bibinfo{person}{Yushuai Li} {et~al\mbox{.}}}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Generative {AI} for Self-Adaptive Systems: State of
+  the Art and Research Roadmap}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Autonomous and Adaptive
+  Systems (TAAS)}} (\bibinfo{year}{2024}).
+\newblock
+
+
+\bibitem[{Microsoft}(2026)]%
+        {microsoft}
+\bibfield{author}{\bibinfo{person}{{Microsoft}}.}
+  \bibinfo{year}{2026}\natexlab{}.
+\newblock \bibinfo{title}{Agent Governance Toolkit: Open-source runtime
+  security for {AI} agents}.
+\newblock
+  \bibinfo{howpublished}{\url{https://github.com/microsoft/agent-governance-toolkit}}.
+\newblock
+
+
+\bibitem[{NIST}(2023)]%
+        {nist}
+\bibfield{author}{\bibinfo{person}{{NIST}}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{{AI} Risk Management Framework ({AI RMF}
+  1.0)}}.
+\newblock \bibinfo{type}{{T}echnical {R}eport} NIST AI 100-1.
+  \bibinfo{institution}{National Institute of Standards and Technology}.
+\newblock
+
+
+\bibitem[Parasuraman et~al\mbox{.}(2000)]%
+        {parasuraman}
+\bibfield{author}{\bibinfo{person}{Raja Parasuraman},
+  \bibinfo{person}{Thomas~B. Sheridan}, {and} \bibinfo{person}{Christopher~D.
+  Wickens}.} \bibinfo{year}{2000}\natexlab{}.
+\newblock \showarticletitle{A Model for Types and Levels of Human Interaction
+  with Automation}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Systems, Man, and
+  Cybernetics---Part A: Systems and Humans}} \bibinfo{volume}{30},
+  \bibinfo{number}{3} (\bibinfo{year}{2000}), \bibinfo{pages}{286--297}.
+\newblock
+
+
+\bibitem[P{\u{a}}un(2000)]%
+        {paun1998}
+\bibfield{author}{\bibinfo{person}{Gheorghe P{\u{a}}un}.}
+  \bibinfo{year}{2000}\natexlab{}.
+\newblock \showarticletitle{Computing with Membranes}.
+\newblock \bibinfo{journal}{\emph{J. Comput. System Sci.}}
+  \bibinfo{volume}{61}, \bibinfo{number}{1} (\bibinfo{year}{2000}),
+  \bibinfo{pages}{108--143}.
+\newblock
+
+
+\bibitem[Perez~Rios(2025)]%
+        {perezrios}
+\bibfield{author}{\bibinfo{person}{Jose Perez~Rios}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{The Viable System Model and Organizational
+  Pathologies in the Age of {AI}}.
+\newblock \bibinfo{journal}{\emph{Systems}} \bibinfo{volume}{13},
+  \bibinfo{number}{9} (\bibinfo{year}{2025}), \bibinfo{pages}{749}.
+\newblock
+
+
+\bibitem[Weyns(2020)]%
+        {weyns}
+\bibfield{author}{\bibinfo{person}{Danny Weyns}.}
+  \bibinfo{year}{2020}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Introduction to Self-Adaptive Systems: A
+  Contemporary Software Engineering Perspective}}.
+\newblock \bibinfo{publisher}{Wiley}.
+\newblock
+
+
+\bibitem[Wu et~al\mbox{.}(2024)]%
+        {autogen}
+\bibfield{author}{\bibinfo{person}{Qingyun Wu}, \bibinfo{person}{Gagan Bansal},
+  \bibinfo{person}{Jieyu Zhang}, \bibinfo{person}{Yiran Wu},
+  \bibinfo{person}{Beibin Li}, \bibinfo{person}{Erkang Zhu},
+  \bibinfo{person}{Li Jiang}, \bibinfo{person}{Xiaoyun Zhang},
+  \bibinfo{person}{Shaokun Zhang}, \bibinfo{person}{Jiale Liu},
+  \bibinfo{person}{Ahmed~Hassan Awadallah}, \bibinfo{person}{Ryen~W. White},
+  \bibinfo{person}{Doug Burger}, {and} \bibinfo{person}{Chi Wang}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{AutoGen}: Enabling Next-Gen {LLM} Applications via
+  Multi-Agent Conversation}. In \bibinfo{booktitle}{\emph{Proceedings of the
+  Conference on Language Modeling (COLM)}}.
+\newblock
+
+
+\bibitem[Xiang et~al\mbox{.}(2025)]%
+        {agentguard}
+\bibfield{author}{\bibinfo{person}{Ruijie Xiang} {et~al\mbox{.}}}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{{AgentGuard}: Runtime Verification of {AI} Agents}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2509.23864}}
+  (\bibinfo{year}{2025}).
+\newblock
+
+
+\bibitem[Zurek et~al\mbox{.}(2024)]%
+        {sari}
+\bibfield{author}{\bibinfo{person}{Matthew Zurek} {et~al\mbox{.}}}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{SARI}: Shared Autonomy across Repeated
+  Interaction}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Human-Robot Interaction}}
+  (\bibinfo{year}{2024}).
+\newblock
+
+
+\end{thebibliography}

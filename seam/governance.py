@@ -179,7 +179,7 @@ def encode_sprint(state: SprintState) -> Return:
             membrane = BreathMembrane(base=threshold, amplitude=0.1, frequency=0.3)
         else:
             membrane = Membrane(threshold=threshold)
-        structure = Edge(structure, Var("sprint"), membrane)
+        structure = Edge(structure, Var(f"vt-{tier.value}"), membrane)
 
     # --- Governance infrastructure: holding edges ---
     # Governance checks (preflights, gates, reviews) are NOT transparent.
@@ -198,7 +198,7 @@ def encode_sprint(state: SprintState) -> Return:
         visible = ("agent-output",)
         veiled = tuple(f"duty-{i}" for i in range(min(state.governance_checks, 3)))
         structure = Word(
-            structure, Var("sprint"),
+            structure, Var("governance"),
             visible_share=visible,
             veiled_duty=veiled,
             covenant="governed autonomy",

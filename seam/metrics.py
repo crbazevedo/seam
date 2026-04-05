@@ -49,7 +49,7 @@ class ExprMetrics:
     @property
     def exposure(self) -> float:
         if self.edge_nodes == 0:
-            return 0.5  # neutral — no membranes
+            return 1.0  # no gates = no restraint = fully exposed
         return self.edges_passing / self.edge_nodes
 
 

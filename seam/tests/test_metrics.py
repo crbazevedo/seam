@@ -30,9 +30,9 @@ class TestConnectivity(unittest.TestCase):
 
 class TestExposure(unittest.TestCase):
     def test_no_edges(self):
-        """Expression with no edges has neutral exposure (0.5)."""
-        self.assertEqual(exposure(Var("x")), 0.5)
-        self.assertEqual(exposure(Seam(Var("a"), Var("b"))), 0.5)
+        """Expression with no edges is fully exposed (1.0) — no gates = no restraint."""
+        self.assertEqual(exposure(Var("x")), 1.0)
+        self.assertEqual(exposure(Seam(Var("a"), Var("b"))), 1.0)
 
     def test_passing_edge(self):
         """Edge with low threshold passes → exposure = 1.0."""
